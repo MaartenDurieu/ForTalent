@@ -1,0 +1,42 @@
+<div class="wrapper">
+  <div class="login-container">
+    <form [formGroup]="form" (ngSubmit)="logIn()">
+      <div class="upper-container">
+        <div class="login-text">Login</div>
+        <div class="ForTalent-text">Welcome back to ForTalent!</div>
+      </div>
+      <div class="input-container">
+        <input placeholder="Mail" type="text" formControlName="login" />
+        <input
+          placeholder="Password"
+          type="password"
+          formControlName="password"
+        />
+      </div>
+      <div class="function-container">
+        <button
+          class="submit"
+          [disabled]="
+            !(form.getRawValue().login && form.getRawValue().password)
+          "
+          style="margin-bottom: 4px"
+          (click)="logIn()"
+        >
+          Sign in
+        </button>
+        <div class="remember-me">
+          <input type="checkbox" formControlName="keepSignedIn" />
+          <div class="remember-me-text">Remember me?</div>
+        </div>
+      </div>
+      <div class="lower-container">
+        <div class="seperator">
+          <hr class="line" />
+          <span>Or</span>
+          <hr class="line" />
+        </div>
+        <div class="note" routerLink="/signup">Register as a new account</div>
+      </div>
+    </form>
+  </div>
+</div>

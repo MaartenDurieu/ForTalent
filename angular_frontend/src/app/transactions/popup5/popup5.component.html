@@ -1,0 +1,16 @@
+<h2 mat-dialog-title><b>Attached message</b></h2>
+<mat-dialog-content class="mat-typography">
+  <textarea  readonly
+  id="textareaMessage"
+  placeholder="Add Motivation (Optional)"
+  id="message"
+  maxlength="300"
+  value={{data.message}}
+  [(ngModel)]="data.message"
+  rows="5"
+  style="font-size:18px; width:300px"
+  ></textarea>
+</mat-dialog-content>
+<mat-dialog-actions align="start">
+  <button mat-button mat-dialog-close class="submit">Return</button>
+</mat-dialog-actions>

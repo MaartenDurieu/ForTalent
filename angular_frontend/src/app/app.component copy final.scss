@@ -1,0 +1,117 @@
+// Do not touch these elements
+.filler {
+  height: 50px;
+  width: 100%;
+  background-color: blue;
+  position: relative; /* make sure the position is set */
+}
+  
+.grid-container {
+  display: grid;
+  grid-template-columns: 200px 1fr; /* define the left-bar as the first column*/
+  grid-template-rows: 80px 1fr; /* include the top bar's height */
+  height: 100vh;
+  position: relative; /* set position to relative */
+}
+  
+.main-content {
+  height: 100%;
+  width: 100%;
+}
+  
+.nav-link{
+  color:#E5E5E5 ;
+  font-size: 16px;
+  margin-left: 10px;
+  margin-right: 10px;
+}
+  // Use these to format the top navbar
+.nav-top-bar {
+  display: flex;
+  align-items: center;
+  text-align: center;
+  background-color: rgb(140,4,4); //#1E1E1E
+  color: #E5E5E5 ;
+  height: 50px;
+  width: 100%;
+  position: fixed;
+  top:0;
+  left:0;
+  z-index: 100000;
+}
+
+.navbar-title {
+    flex: 1; /* use all available space */
+    text-align: left;
+    font-size: 26px;
+    padding: 0 10px;
+    margin-left: 8px;
+    cursor: pointer;
+}
+
+// Use these to format the left navbar
+.left-sidebar {
+  width: 200px;
+  height: 100%;
+  background-color: rgb(197, 146, 146);
+  color: rgba(0,0,0,0.55);
+  position: fixed;
+  top:-50px;
+  margin-top: 80px;
+  display: flex;
+  justify-content: center;
+  transition: left 0.3s ease-in-out;
+}
+
+
+.nav-items {
+  padding: 20px;
+  //for icons
+  margin-right: 20px;
+  margin-bottom: 10px;
+}
+.icon:hover{
+  color:rgb(200,4,4);
+  cursor: pointer;
+  font-weight:500;
+  opacity: 1 !important;
+  border-radius: 10px;
+}
+
+.active {
+  // color: rgb(200, 4, 4);
+  color:rgb(200,4,4);
+  font-weight:500;
+  opacity: 1 !important;
+}
+
+// Styling for the bottom section
+.bottom-section {
+  position: fixed;
+    bottom:0;
+    left:0;
+    width: 200px;
+    padding:20px;
+}
+
+.icon {
+  margin-top: 20px;
+  display: inline-flex;
+  align-items: center;
+}
+
+p {
+  margin-top: 18px;
+  margin-left: 8px;
+}
+
+body {
+  overflow-x: hidden; /* hide the horizontal scrollbar */
+}
+
+hr {
+  border: none;
+  border-top: 2px solid rgba(0,0,0,0.1);
+  margin: 2rem 0;
+  margin-bottom: 0px;
+}

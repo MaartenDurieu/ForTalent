@@ -1,0 +1,136 @@
+<div class="wrapper">
+  <div class="listing-creation-container">
+    <form
+    id="VenueForm"
+    [formGroup]="form"
+    *ngIf="form.getRawValue() as f">
+    <div class="upper-container">
+      <div class="signup-text">Create listing</div>
+      <div class="description-text">Please fill in the required information</div>
+    </div>
+    <div class="text-seperator">Who can view this listing?</div>
+    <div class="radio-inputs" >
+      <label class="radio-s">
+        <input type="radio" name="radiostat" checked id="radio-private" (change)="listingTypeSelector()">
+        <span class="name">Everyone</span>
+      </label>
+      <label class="radio-s">
+        <input type="radio" name="radiostat" (change)="listingTypeSelector()">
+        <span class="name">Link only</span>
+      </label>
+    </div>
+    <div class="text-seperator">Listing information</div>
+    <div class="input-fields">
+      <input placeholder="Listing name" type="text" formControlName="title">
+      <!-- Select Image-->
+      <div class="img-div">
+        <label for="inputTag" class="img-label">
+          Select Listing Picture
+          <input id="inputTag" type="file" class="img-input" (change)="fileSelected($event)" accept="image/png, image/jpeg"/>
+          <br/>
+          <span id="imageName"></span>
+        </label>
+      </div>
+
+      <!-- Display selected Image -->
+      <div *ngIf="imgSrc" style="display: flex; justify-content: center">
+        <img
+          style="width: 100%; height: 360px;border-radius:8px;object-fit: cover;"
+          [src]="imgSrc"
+        />
+      </div>
+
+      <!-- Remove Image Button -->
+      <button
+        *ngIf="imgSrc"
+        type="button"
+        class="btn btn-outline-danger btn-block"
+        (click)="imgSrc = null"
+        style="margin-bottom:20px;"
+      >
+        Remove Picture
+      </button>
+
+      <!-- Image Error -->
+      <small *ngIf="imgErrorBanner" class="form-text">
+        <i style="color: red">{{ imgErrorBanner }}</i>
+      </small>
+
+      <textarea
+            id="description"
+            placeholder="Write a description for your listing"
+            rows="8"
+            formControlName="description"
+          >
+          </textarea>
+    </div>
+    <div class="text-seperator">Listing details</div>
+    <div class="input-fields">
+      <input required="" type="date" formControlName="date" placeholder="Which date?">
+      <div class="currency-input">
+        <input placeholder="Suggested pay" type="number" formControlName="suggestedPrice" style="background:transparent;">
+        <span style="margin-right:20px;width:4%;">€/hr</span>
+      </div>
+      <div class="time-sep">
+        <div class="time-text">Start hour</div>
+      <input required="" type="time"  formControlName="startTime">
+    </div>
+    <div class="time-sep">
+      <div class="time-text">End hour</div>
+    <input required="" type="time"  formControlName="endTime">
+  </div>
+  <div class="time-sep">
+    <div class="time-text">Address</div>
+  <div class="radio-inputs" style="margin-bottom:0px;">
+    <label class="radio-s">
+      <input type="radio" name="radioaddress" checked (change)="addressSelector()">
+      <span class="name">Linked to my account</span>
+    </label>
+    <label class="radio-s">
+      <input type="radio" id="radio-address" name="radioaddress" (change)="addressSelector()">
+      <span class="name">Other</span>
+    </label>
+  </div>
+</div>
+<input placeholder="Other address" type="text" formControlName="location" *ngIf="customAddress">
+    </div>
+    <div class="text-seperator">Looking for</div>
+    <div class="multiple-select">
+    <mat-form-field style="margin-right:20px;">
+      <mat-label>Type</mat-label>
+      <mat-select [(formControl)]="artistType" multiple disableRipple>
+        <mat-select-trigger>
+          {{artistType.value?.[0] || ''}}
+          <span *ngIf="(artistType.value?.length || 0) > 1" class="example-additional-selection" (selectionChange)="handltypeChange()">
+            (+{{(artistType.value?.length || 0) - 1}} {{artistType.value?.length === 2 ? 'other' : 'others'}})
+          </span>
+        </mat-select-trigger>
+        <mat-option *ngFor="let topping of artistTypes" [value]="topping">{{topping}}</mat-option>
+      </mat-select>
+    </mat-form-field>
+    <mat-form-field style="margin-left:20px;">
+      <mat-label>Genre(s)</mat-label>
+      <mat-select [(formControl)]="genre" multiple disableRipple (selectionChange)="handlegenreChange()">
+        <mat-select-trigger>
+          {{genre.value?.[0] || ''}}
+          <span *ngIf="(genre.value?.length || 0) > 1" class="example-additional-selection">
+            (+{{(genre.value?.length || 0) - 1}} {{genre.value?.length === 2 ? 'other' : 'others'}})
+          </span>
+        </mat-select-trigger>
+        <mat-option *ngFor="let topping of genres" [value]="topping">{{topping}}</mat-option>
+      </mat-select>
+    </mat-form-field>
+  </div>
+  <button
+  class="submit"
+  style="margin-bottom: 4px;margin-top:10px;"
+  (click)="createListing()"
+  [disabled]="!(genre.value && artistType.value && f.date && f.startTime && f.endTime && f.suggestedPrice && f.title && f.description && imgSrc)"
+>Create listing</button>
+<small *ngIf="error" class="form-text">
+  <i style="color: red">{{ error }}</i>
+</small>
+
+    </form>
+  </div>
+</div>

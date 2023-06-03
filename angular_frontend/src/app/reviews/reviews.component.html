@@ -1,0 +1,138 @@
+<app-loading-spinner *ngIf="isLoading"></app-loading-spinner>
+<div *ngIf="isLoading==false" class="not-info">
+<h3 *ngIf="writeReviewAmount==1">NEW: You can write a new review (marked in blue)</h3>
+<h3 *ngIf="writeReviewAmount>1">NEW: You can write {{writeReviewAmount}} new reviews (marked in blue)</h3>
+</div>
+<div *ngIf="!isLoading">
+<div class="incoming-title">
+  <h2 *ngIf="filteredReviewable().length>0" (click)="toggleIncoming()">Write reviews ({{filteredReviewable().length}})</h2>
+  <h2 *ngIf="filteredReviewable().length==0">No listings to reviews</h2>
+  <div class="collapse-arrow"  [ngClass]="{'rotate': incomingvis}" *ngIf="filteredReviewable().length>0" (click)="toggleIncoming()">
+  <svg width="48" height="48" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg" >
+    <path d="M12 18L24 30L36 18" stroke="#006D77" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>  
+  </div>
+  </div>
+<div class="com-container" [ngClass]="{'show': incomingvis}">
+  <div *ngFor="let ai of filteredReviewable();" class="complete-r-container" [ngStyle]="{'border': writeReviewBold.includes(ai.listingID) ? '1px solid #3F80E9' : ''}">
+    <div class="review-container">
+    <div class="reviewe-info" [routerLink]="['/profileDisplay', ai.userID]" *ngIf="artistAccount">
+      <div class="reviewe-pic">
+        <img [src]="ai.user.profilePicture" style="width:100%;height:100%;border-radius: 50%;">
+      </div>
+      <div class="reviewe-name">{{ai.user.displayName}}</div>
+    </div>
+    <div class="reviewe-info" [routerLink]="['/profileDisplay', ai.user.userID]" *ngIf="venueAccount">
+      <div class="reviewe-pic">
+        <img [src]="ai.user.profilePicture" style="width:100%;height:100%;border-radius: 50%;">
+      </div>
+      <div class="reviewe-name">{{ai.user.displayName}}</div>
+    </div>
+    <div style="display:flex; align-items:center;">
+      <div class="proposal-button" style="width:32px;display:flex;justify-content: center;align-items: center;" [routerLink]="['/reviews/write/', ai.listingID]">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M11 4H4C3.46957 4 2.96086 4.21071 2.58579 4.58579C2.21071 4.96086 2 5.46957 2 6V20C2 20.5304 2.21071 21.0391 2.58579 21.4142C2.96086 21.7893 3.46957 22 4 22H18C18.5304 22 19.0391 21.7893 19.4142 21.4142C19.7893 21.0391 20 20.5304 20 20V13" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          <path d="M20 1.87866C19.4374 1.87866 18.8978 2.10216 18.5 2.49998L9 12L8 16L12 15L21.5 5.49998C21.8978 5.10216 22.1213 4.56259 22.1213 3.99998C22.1213 3.43737 21.8978 2.89781 21.5 2.49998C21.1022 2.10216 20.5626 1.87866 20 1.87866Z" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>                        
+      </div>
+    </div>
+  </div>
+  <div  class="review-cat" style="justify-content:space-between; width:100%;">
+    <div class="score-text">{{ai.title}}</div>
+    <div class="score-result">€{{ai.suggestedPrice}}/hr</div>
+   </div>
+  </div>
+</div>
+
+  <div class="incoming-title">
+    <h2 *ngIf="writtenReviews.length>0" (click)="toggleWritten()">Reviews you wrote ({{writtenReviews.length}})</h2>
+    <h2 *ngIf="writtenReviews.length==0">You have not written any reviews</h2>
+    <div class="collapse-arrow"  [ngClass]="{'rotate': writtenvis}" *ngIf="writtenReviews.length>0" (click)="toggleWritten()">
+    <svg width="48" height="48" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg" >
+      <path d="M12 18L24 30L36 18" stroke="#006D77" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>  
+    </div>
+    </div>
+  <div class="wrapppp">
+  <div *ngFor="let rc of writtenReviews; let i = index" [ngClass]="{'show2': writtenvis}" class="complete-r-container" (click)="toggleDetails(rc)" >
+    <div class="review-container2" [ngClass]="{ 'selected': selected }">
+    <div class="reviewe-info" [routerLink]="['/profileDisplay', rc.user.userID]">
+      <div class="reviewe-pic">
+        <img [src]="rc.user.profilePicture" style="width:100%;height:100%;border-radius: 50%;">
+      </div>
+      <div class="reviewe-name">{{rc.user.displayName}}</div>
+    </div>
+    <div style="display:flex; align-items:center;">
+      <div class="reviewe-score">{{rc.avgScore | number:'1.0-1'}}</div>
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="#FAB81E" xmlns="http://www.w3.org/2000/svg" style="margin-bottom:2px;">
+        <path d="M15.09 8.26L12 2L8.91 8.26L2 9.27L7 14.14L5.82 21.02L12 17.77L18.18 21.02L17 14.14L22 9.27L15.09 8.26Z" stroke="#FAB81E" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>   
+    </div>
+  </div>
+  <div class="review-cat" style="justify-content:space-between; width:100%;">
+    <div class="score-text">{{rc.listing.title}}</div>
+    <div class="score-result">€{{rc.listing.suggestedPrice}}/hr</div>
+   </div>
+  <div class="r-details-container" *ngIf="rc.showDetails">
+     <div *ngIf="rc.onTime" class="review-cat">
+      <div class="score-text">On time</div>
+      <div class="score-result">{{rc.onTime}}/5</div>
+     </div>
+     <div *ngIf="rc.professionalism" class="review-cat">
+      <div class="score-text">Professionalism</div>
+      <div class="score-result">{{rc.professionalism}}/5</div>
+     </div>
+     <div *ngIf="rc.friendly" class="review-cat">
+      <div class="score-text">Friendly</div>
+      <div class="score-result">{{rc.friendly}}/5</div>
+     </div>
+     <div *ngIf="rc.collaboration" class="review-cat">
+      <div class="score-text">Collaboration</div>
+      <div class="score-result">{{rc.collaboration}}/5</div>
+     </div>
+     <div *ngIf="rc.music" class="review-cat">
+      <div class="score-text">Music</div>
+      <div class="score-result">{{rc.music}}/5</div>
+     </div>
+     <div *ngIf="rc.originality" class="review-cat">
+      <div class="score-text">Originality</div>
+      <div class="score-result">{{rc.originality}}/5</div>
+     </div>
+     <div *ngIf="rc.audience" class="review-cat">
+      <div class="score-text">Audience</div>
+      <div class="score-result">{{rc.audience}}/5</div>
+     </div>
+     <div *ngIf="rc.experience" class="review-cat">
+      <div class="score-text">Experience</div>
+      <div class="score-result">{{rc.experience}}/5</div>
+     </div>
+     <div *ngIf="rc.atmosphere" class="review-cat">
+      <div class="score-text">Atmosphere</div>
+      <div class="score-result">{{rc.atmosphere}}/5</div>
+     </div>
+     <div *ngIf="rc.accomodation" class="review-cat">
+      <div class="score-text">Accomodation</div>
+      <div class="score-result">{{rc.accomodation}}/5</div>
+     </div>
+     <div *ngIf="rc.acoustics" class="review-cat">
+      <div class="score-text">Acoustics</div>
+      <div class="score-result">{{rc.acoustics}}/5</div>
+     </div>
+     <div *ngIf="rc.organisation" class="review-cat">
+      <div class="score-text">Organisation</div>
+      <div class="score-result">{{rc.organisation}}/5</div>
+     </div>
+     <div *ngIf="rc.helpful" class="review-cat">
+      <div class="score-text">Helpful</div>
+      <div class="score-result">{{rc.helpful}}/5</div>
+     </div>
+     <div *ngIf="rc.originality" class="review-cat">
+      <div class="score-text">{{rc.listing.title}}</div>
+      <div class="score-result">€{{rc.listing.suggestedPrice}}/hr</div>
+     </div>
+     <div *ngIf="rc.reviewText" class="review-cat2">
+      <u>Description:</u>{{rc.reviewText}}</div>
+  </div>
+</div>
+  </div>
+</div>

@@ -1,0 +1,139 @@
+<!--https://www.figma.com/file/aG7a3TCDTi5Vbp9xZmdVl8/Simple-Sidebar-with-prototype-(Community)?node-id=46%3A4330&t=yz9i2nI7c9Cb2FYD-0-->
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+<body style="background:#e8e8e8;">
+<div class="sidebar" *ngIf="user.isLoggedIn()">
+  <div class="upper-sidebar">
+    <div class="company-container" routerLink="/listings">
+      <div class="logo">
+        <svg width="48" height="48" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M8 42V28" stroke="#F2F2F2" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          <path d="M8 20V6" stroke="#F2F2F2" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          <path d="M24 42V24" stroke="#F2F2F2" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          <path d="M24 16V6" stroke="#F2F2F2" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          <path d="M40 42V32" stroke="#F2F2F2" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          <path d="M40 24V6" stroke="#F2F2F2" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          <path d="M2 28H14" stroke="#F2F2F2" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          <path d="M18 16H30" stroke="#F2F2F2" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          <path d="M34 32H46" stroke="#F2F2F2" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+      </div>
+      <div class="company">ForTalent</div>
+    </div>
+    <div class="item-list">
+      <div class="item" routerLink="/listings" routerLinkActive="active">
+        <div class="item-icon">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path routerLinkActive="activefillback" d="M12 2L3 9V20C3 20.5304 3.21071 21.0391 3.58579 21.4142C3.96086 21.7893 4.46957 22 5 22H19C19.5304 22 20.0391 21.7893 20.4142 21.4142C20.7893 21.0391 21 20.5304 21 20V9L12 2Z" stroke="#F2F2F2" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            <path routerLinkActive="activefillfront" d="M9 22V12H15V22" stroke="#F2F2F2" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>            
+        </div>
+        <div class="item-text">Home</div>
+      </div>
+      <div class="item" routerLink="/mylistings" routerLinkActive="active" id="myDiv">
+        <div class="item-icon">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path routerLinkActive="activefillback" d="M6 2H14L20 8V20C20 20.5304 19.7893 21.0391 19.4142 21.4142C19.0391 21.7893 18.5304 22 18 22H6C5.46957 22 4.96086 21.7893 4.58579 21.4142C4.21071 21.0391 4 20.5304 4 20V4C4 3.46957 4.21071 2.96086 4.58579 2.58579C4.96086 2.21071 5.46957 2 6 2Z" stroke="#F2F2F2" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            <path routerLinkActive="activefillback" d="M14 2V8H20" stroke="#F2F2F2" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            <path routerLinkActive="activefillstroke" d="M16 13H8" stroke="#F2F2F2" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            <path routerLinkActive="activefillstroke" d="M16 17H8" stroke="#F2F2F2" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            <path routerLinkActive="activefillstroke" d="M10 9H9H8" stroke="#F2F2F2" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>  
+        </div>
+        <div class="item-text">MyListings</div>
+        <div class="notification" *ngIf="expiredListingNot>0">
+          <div class="notification-text">{{expiredListingNot > 9 ? '9+': expiredListingNot}}</div>
+        </div>
+      </div>
+      <div class="item" routerLink="/calendar"  routerLinkActive="active">
+        <div class="item-icon">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path routerLinkActive="activefillback" d="M19 4H5C3.89543 4 3 4.89543 3 6V20C3 21.1046 3.89543 22 5 22H19C20.1046 22 21 21.1046 21 20V6C21 4.89543 20.1046 4 19 4Z" stroke="#F2F2F2" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            <path routerLinkActive="activefillstroke" d="M16 2V6" stroke="#F2F2F2" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            <path routerLinkActive="activefillstroke" d="M8 2V6" stroke="#F2F2F2" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            <path routerLinkActive="activefillstroke" d="M3 10H21" stroke="#F2F2F2" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>            
+      </div>
+        <div class="item-text">Calendar</div>
+        <div class="notification" *ngIf="paymentReceivedNot>0">
+          <div class="notification-text">{{paymentReceivedNot > 9 ? '9+': paymentReceivedNot}}</div>
+        </div>
+      </div>
+      <div class="item" routerLink="/transactions/userArtist" routerLinkActive="active">
+        <div class="item-icon">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path  d="M22 12H16L14 15H10L8 12H2" stroke="#F2F2F2" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            <path routerLinkActive="activefillback" d="M2 12L5.45 5.11C5.61558 4.77679 5.87083 4.49637 6.18704 4.30028C6.50326 4.10419 6.86792 4.0002 7.24 4H16.76C17.1321 4.0002 17.4967 4.10419 17.813 4.30028C18.1292 4.49637 18.3844 4.77679 18.55 5.11L22 12V18C22 18.5304 21.7893 19.0391 21.4142 19.4142C21.0391 19.7893 20.5304 20 20 20H4C3.46957 20 2.96086 19.7893 2.58579 19.4142C2.21071 19.0391 2 18.5304 2 18V12Z" stroke="#F2F2F2" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>            
+        </div>
+        <div class="item-text">Proposals</div>
+        <div class="notification" *ngIf="transactionsNot>0">
+          <div class="notification-text">{{transactionsNot > 9 ? '9+' : transactionsNot}}</div>
+        </div>
+      </div>
+      <div class="item" routerLink="/reviews" routerLinkActive="active"> 
+        <div class="item-icon">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path routerLinkActive="activefillback" d="M12 15C15.866 15 19 11.866 19 8C19 4.13401 15.866 1 12 1C8.13401 1 5 4.13401 5 8C5 11.866 8.13401 15 12 15Z" stroke="#F2F2F2" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            <path  d="M8.21 13.89L7 23L12 20L17 23L15.79 13.88" stroke="#F2F2F2" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+            
+        </div>
+        <div class="item-text">Reviews</div>
+        <div class="notification" *ngIf="writeReviewNot>0">
+          <div class="notification-text">{{writeReviewNot > 9 ? '9+' : writeReviewNot}}</div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="lower-sidebar">
+    <div class="lower-item-list">
+      <div class="item" routerLink="/messages" routerLinkActive="active">
+        <div class="item-icon">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path routerLinkActive="activefillback" d="M20.4142 16.4142C20.7893 16.0391 21 15.5304 21 15V5C21 4.46957 20.7893 3.96086 20.4142 3.58579C20.0391 3.21071 19.5304 3 19 3H5C4.46957 3 3.96086 3.21071 3.58579 3.58579C3.21071 3.96086 3 4.46957 3 5V21L7 17H19C19.5304 17 20.0391 16.7893 20.4142 16.4142Z" stroke="#F2F2F2" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>            
+        </div>
+        <div class="item-text">Messages</div>
+      </div>
+      <div class="item" routerlink="/landingpage" routerLinkActive="active">
+        <div class="item-icon">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path routerLinkActive="activefillback"  d="M12 22C17.5228 22 22 17.5228 22 12C22 6.47715 17.5228 2 12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22Z" stroke="#F2F2F2" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            <path routerLinkActive="activefillfront" d="M9.09 8.99999C9.3251 8.33166 9.78915 7.7681 10.4 7.40912C11.0108 7.05015 11.7289 6.91893 12.4272 7.0387C13.1255 7.15848 13.7588 7.52151 14.2151 8.06352C14.6713 8.60552 14.9211 9.29151 14.92 9.99999C14.92 12 11.92 13 11.92 13" stroke="#F2F2F2" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            <path routerLinkActive="activefillfront" d="M12 17H12.01" stroke="#F2F2F2" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>            
+        </div>
+        <div class="item-text" href="#">About</div>
+      </div>
+      <div class="profile" [routerLink]="['/profileDisplay', this.user.getId()]">
+        <div class="avatar">
+          <img style="border-radius: 50%; height: 100%; width: 100%" [src]="user.getProfilePicture()">
+        </div>
+        <div class="login-details">
+          <div class="name">{{user.getUserName()}}</div>
+          <div class="notification" style="margin-left:0px;" *ngIf="receivedReviewNot>0">
+            <div class="notification-text">{{receivedReviewNot > 9 ? '9+' : receivedReviewNot}}</div>
+          </div>
+        </div>
+        <div class="logout" (click)="user.logOut()" routerLink="/login">
+          <svg width="25" height="24" viewBox="0 0 25 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M9.5 21H5.5C4.96957 21 4.46086 20.7893 4.08579 20.4142C3.71071 20.0391 3.5 19.5304 3.5 19V5C3.5 4.46957 3.71071 3.96086 4.08579 3.58579C4.46086 3.21071 4.96957 3 5.5 3H9.5" stroke="#F2F2F2" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M16.5 17L21.5 12L16.5 7" stroke="#F2F2F2" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M21.5 12H9.5" stroke="#F2F2F2" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div style="display:flex;">
+<div style="width:280px;"></div>
+<div class="main-content" *ngIf="user.isLoggedIn()">
+<router-outlet></router-outlet>
+</div>
+</div>
+
+<router-outlet *ngIf="!user.isLoggedIn()"></router-outlet>
+
+</body>

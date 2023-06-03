@@ -1,0 +1,225 @@
+body {
+    background-image: url('https://images.unsplash.com/photo-1614248036189-09375ea8098f?ixid=Mnw5MTMyMXwwfDF8c2VhcmNofDQ2fHxnaWd8ZW58MHx8fHwxNjczMDgzNjc3&ixlib=rb-4.0.3&w=1400');
+    background-size: 140%;
+    font-family: sans-serif;
+    color: white;
+    text-align: center;
+    overflow:hidden;
+    animation: move-bg 45s linear infinite;
+    animation-iteration-count: infinite;
+  }
+  
+  /* Create the animation that moves the background image */
+@keyframes move-bg {
+  from { background-position: 0 0; }
+  50% { background-position: 40% 0; }
+  to { background-position: 0% 0; }
+}
+
+h1 {
+    font-size: 66px;
+    font-family: 'Futura';
+}
+
+h2 {
+    font-size: 24px;
+    font-family: 'Futura';
+    border-bottom: 1px solid white;
+}
+  
+p {
+    font-size: 14px;
+}
+  
+a.button {
+    display: inline-block;
+    background-color: blue;
+    color: white;
+    padding: 10px 20px;
+    font-size: 16px;
+    text-decoration: none;
+    margin-bottom: 20px;
+}
+  
+a.button:hover {
+    background-color: darkblue;
+}
+
+.button + .button {
+    border-left: 1px solid #fff;
+  }
+
+.wrapper {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: 100%;
+    overflow-x: hidden;
+    overflow-y: hidden;
+  }
+  .container {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 100%;
+    opacity:1;
+    display: flex;
+    align-items: center;
+    flex-direction: row;
+  }
+
+  .wrapper::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+  }
+  
+
+.left-container {
+    float: left;
+    width: 40%;
+    text-align: left;
+    align-items: center;
+  }
+  
+  .right-container {
+    margin-left:200px;
+    float: right;
+    width: 40%;
+  }
+
+
+  .arrow::before {
+    content: "➜";
+    position: absolute;
+    left: -20px;
+    font-size: 24px;
+    color: whitesmoke;
+  }
+  button {
+    position: relative;
+    display: inline-block;
+    cursor: pointer;
+    outline: none;
+    border: 0;
+    vertical-align: middle;
+    text-decoration: none;
+    background: transparent;
+    padding: 0;
+    font-size: inherit;
+    font-family: inherit;
+   }
+   
+   button.learn-more {
+    width: 12rem;
+    height: auto;
+   }
+   
+   button.learn-more .circle {
+    transition: all 0.45s cubic-bezier(0.65, 0, 0.076, 1);
+    position: relative;
+    display: block;
+    margin: 0;
+    width: 3rem;
+    height: 3rem;
+    background: rgb(89, 86, 86);
+    border-radius: 1.625rem;
+   }
+   
+   button.learn-more .circle .icon {
+    transition: all 0.45s cubic-bezier(0.65, 0, 0.076, 1);
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    margin: auto;
+    background: #fff;
+   }
+   
+   button.learn-more .circle .icon.arrow {
+    transition: all 0.45s cubic-bezier(0.65, 0, 0.076, 1);
+    left: 0.625rem;
+    width: 1.125rem;
+    height: 0.125rem;
+    background: none;
+   }
+   
+   button.learn-more .circle .icon.arrow::before {
+    position: absolute;
+    content: "";
+    top: -0.29rem;
+    right: 0.0625rem;
+    width: 0.625rem;
+    height: 0.625rem;
+    border-top: 0.125rem solid #fff;
+    border-right: 0.125rem solid #fff;
+    transform: rotate(45deg);
+   }
+   
+   button.learn-more .button-text {
+    transition: all 0.45s cubic-bezier(0.65, 0, 0.076, 1);
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    padding: 0.75rem 0;
+    margin: 0 0 0 1.85rem;
+    color: #fff;
+    font-weight: 700;
+    line-height: 1.6;
+    text-align: center;
+    text-transform: uppercase;
+   }
+   
+   button:hover .circle {
+    width: 100%;
+    background: rgb(200, 4, 4);
+   }
+   
+   button:hover .circle .icon.arrow {
+    background: #fff;
+    transform: translate(1rem, 0);
+   }
+   
+   button:hover .button-text {
+    color: #fff;
+   }
+
+   .l-button {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    padding: 15px 38px;
+    border-radius: 16px;
+    width:100%;
+    border: 1px solid transparent;
+    color: #fff;
+    background-color: rgba(200, 4, 4,0.6);
+    font-size: 18px;
+    letter-spacing: 1.5px;
+    transition: all 0.15s linear;
+   }
+   
+   .l-button:hover{
+    background-color: rgb(200, 4, 4);
+    border-color: rgb(200, 4, 4);
+    color: #fff;
+    transform: translateY(-5px) scale(1.05);
+   }
+   
+   .l-button:active {
+    background-color: transparent;
+    border-color: rgb(200, 4, 4);
+    color: rgb(200, 4, 4);
+    transform: translateY(5px) scale(0.95);
+   }
+   
+   

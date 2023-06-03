@@ -1,0 +1,393 @@
+.rating-star-back {
+  position: relative;
+  display: inline-block;
+  font-size: 20px;
+  color: gray;
+}
+
+.rating-star-back-filled {
+  @extend .rating-star-back;
+  color: #FAB81E;
+}
+
+.rating-star-front {
+  position: absolute;
+  display: inline-block;
+  overflow: hidden;
+  color: #FAB81E;
+}
+
+.filter-pane{
+  position: absolute;
+  width:744px;
+  height: 490px;
+  z-index: 999999;
+  display:none;
+  justify-content: right;
+  align-items: center;
+  background: #1C1E22;
+  border-radius: 4px;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2),0 8px 16px rgba(0, 0, 0, 0.2);
+}
+
+.f-button{
+  background: #2E3238;
+  width: 180px;
+  height: 40px;
+  border-radius: 8px;
+  margin-left:16px;
+  display:flex;
+  justify-content: left;
+  align-items: center;
+}
+
+.f-button:hover{
+  cursor:pointer;
+  background:#525355;
+}
+
+.f-button-text{
+  height: 24px;
+  width: 100%;
+  /* Font Medium */
+  font-family: 'Poppins';
+  font-style: normal;
+  font-weight: 600;
+  font-size: 16px;
+  line-height: 24px;
+  margin-left: 8px;
+  /* identical to box height, or 150% */
+  /* Dark theme/Typography */
+  color: #F2F2F2;
+  /* Inside auto layout */
+  flex: none;
+  order: 1;
+  flex-grow: 0;
+}
+//
+.searchbar{
+  background: #1d2226;
+  height: 40px;
+  width: 100%;
+  border-radius: 8px;
+  display:flex;
+  align-items: center;
+  justify-content: left;
+}
+
+.searchbar:hover{
+  cursor:text;
+}
+
+.search-input{
+  width:90%;
+  background:transparent;
+  border:none;
+  outline: 0;
+  color: #EBEDEF;
+  font-family: 'Poppins';
+  font-style: normal;
+  font-weight: 600;
+}
+
+
+//Matcalendar
+::ng-deep .mat-calendar-table-header, ::ng-deep .mat-calendar-body-label {
+  color: #F2F2F2;
+}
+
+::ng-deep .mat-calendar-arrow {
+  border-top-color: #F2F2F2;
+}
+
+::ng-deep .mat-calendar-body-cell-content, ::ng-deep .mat-date-range-input-separator {
+  color: #d8d8d8;
+  border-color: transparent;
+}
+
+::ng-deep .mat-calendar-body-selected {
+  background-color: #3F80E9;
+  color: #1C1E22;
+}
+
+::ng-deep .mat-calendar-body-today:not(.mat-calendar-body-selected):not(.mat-calendar-body-comparison-identical) {
+  border-color: #3F80E9;
+}
+
+::ng-deep .mat-calendar-table-header-divider:after {
+  background: #3F80E9;
+  height:2px;
+}
+
+
+.mat-card{
+  background: transparent;
+  color: #d8d8d8;
+}
+
+.filters-page{
+  height:470px;
+}
+
+.form-control{
+  background: transparent;
+  color:#d8d8d8;
+}
+
+::-webkit-calendar-picker-indicator {
+  filter: invert(100%) sepia(30%) saturate(0%) hue-rotate(203deg) brightness(90%) contrast(95%);
+}
+
+//listings page
+.listing-container{
+  z-index: 0;
+  width: 95%;
+  height:200px;
+  margin-top:10px;
+  margin-left:36px;
+  margin-right:2px;
+  border-radius: 8px;
+}
+
+.btn-secondary {
+  color: #fff;
+  background-color: #3F80E9;
+  border-color: #3F80E9;
+}
+
+.top{
+  display:flex;
+  width: 100%;
+  padding:16px;
+  background-color: #1d2226;
+  border-radius: 8px;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2),0 8px 16px rgba(0, 0, 0, 0.2);
+}
+
+.btn:not(:disabled):not(.disabled) {
+  cursor: pointer;
+  color: white;
+}
+
+label {
+  display: inline-block;
+  margin-bottom: 0.5rem;
+  color: white;
+}
+
+.input-group>.form-control:not(:first-child), .input-group>.custom-select:not(:first-child) {
+  border-top-left-radius: 0;
+  border-bottom-left-radius: 0;
+  color: white;
+}
+
+.cus{
+  background: transparent;
+  color: #F2F2F2;
+  font-family: 'Poppins';
+  font-style: normal;
+  font-weight: 600;
+  border:none;
+  outline:0;
+  margin-right:4px;
+}
+
+.listing{
+  height: 200px;
+  padding:24px; 
+  width: 49%; 
+  margin-bottom:40px;
+  display: flex;
+  background: #1d2226;
+  border-radius: 8px;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2),0 8px 16px rgba(0, 0, 0, 0.2);
+}
+
+.mat-card:not([class*=mat-elevation-z]) {
+  box-shadow:none;
+}
+
+// .picture{
+//   height:100%;
+//   width:auto;
+//   background-color: white;
+//   border-radius: 8px;
+//   box-shadow: 1px 4px 6px rgba(0, 0, 0, 0.25);
+// }
+
+img{
+  height:100%;
+  width: auto;
+  border-radius: 8px;
+}
+
+.listing-info-container{
+  width: 100%;
+  height: 100%;
+  display:flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.top-section{
+  height:40px;
+  width: 100%;
+  display:flex;
+  justify-content: space-evenly;
+  padding-left: 8px;
+  padding-right: 10px;
+  margin-top:14px;
+  border-bottom: 2px solid #9A9A9A;
+  align-items: center;
+}
+
+.title{
+  color: #EBEDEF;
+  font-family: 'Poppins';
+  font-style: normal;
+  font-weight: 600;
+  font-size: 24px;
+  width:100%;
+  display:flex;
+  flex-direction: row;
+  justify-content: left;
+}
+
+.listing-date{
+  color: #F2F2F2;
+  font-family: 'Poppins';
+  font-style: normal;
+  font-weight: 600;
+  font-size: 16px;
+  width:100%;
+  display:flex;
+  align-items: end;
+  justify-content: end;
+}
+
+.listing-details{
+  height: 100%;
+  width: 100%;
+  display:flex;
+  flex-direction: column;
+  padding-left: 8px;
+  justify-content: space-evenly;
+}
+
+.info-div{
+  display:flex;
+}
+
+.info-text{
+  font-family: 'Poppins';
+  font-style: normal;
+  font-weight: 600;
+  font-size: 14px;
+  margin-left:6px;
+  color:#9A9A9A;
+}
+
+.price-info{
+  width:100%;
+  font-family: 'Poppins';
+  font-style: normal;
+  font-weight: 500;
+  font-size: 30px;
+  color: #FAB81E;
+  display:flex;
+  justify-content: flex-end;
+  align-items: center;
+  align-content: flex-end;
+  margin-top:20px;
+}
+
+.listing:hover{
+  transform: scale(1.01);
+  cursor: pointer;
+}
+
+//
+.bottom-section{
+  width: 100%;
+  display:flex;
+  justify-content: flex-end;
+  align-items: center;
+}
+
+.section-card{
+  display:flex;
+  height:100%;
+}
+
+.left-section{
+  width:60%;
+  height:100%;
+}
+
+.right-section{
+  width:40%;
+  height:100%;
+  display:flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.section-card{
+  width:100%;
+  height:100%;
+  // border:2px solid green;
+  //margin-bottom:26px;
+}
+
+.organiser-picture{
+  width:32px;
+  height:32px;
+  display:flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.organiser-name{
+  font-family: 'Poppins';
+  font-style: normal;
+  font-weight: 300;
+  font-size: 16px;
+  color: #EBEDEF;
+}
+
+.profile-clicker{ 
+  height:100%; 
+  display:flex; 
+  flex-direction: row; 
+  justify-content: center; 
+  align-items: center;
+}
+
+.profile-clicker:hover > * {
+  text-decoration: underline;
+}
+
+.add-button{
+  position: fixed;
+  width: 60px;
+  height: 60px;
+  right: 60px;
+  bottom: 60px;
+  background-color: #3F80E9;
+  border-radius: 40px;
+  display:flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.add-button:hover{
+  transform: scale(1.05);
+  cursor: pointer;
+  border: 2px solid white;
+}
+
+.add-button:hover svg path{
+  transform: scale(1.05);
+  cursor: pointer;
+  stroke: white;
+}

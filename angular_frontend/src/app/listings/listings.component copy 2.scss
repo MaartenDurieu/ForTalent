@@ -1,0 +1,181 @@
+.rating-star-back {
+  position: relative;
+  display: inline-block;
+  font-size: 20px;
+  color: gray;
+}
+
+.rating-star-back-filled {
+  @extend .rating-star-back;
+  color: #FAB81E;
+}
+
+.rating-star-front {
+  position: absolute;
+  display: inline-block;
+  overflow: hidden;
+  color: #FAB81E;
+}
+
+.filter-pane{
+  width:744px;
+  height: 490px;
+  display:none;
+  margin-left: 30px;
+  margin-right: 30px;
+  justify-content: right;
+  align-items: center;
+  background: #1C1E22;
+  border-radius: 4px;
+}
+
+//
+.top-row{
+  width: 100%;
+  height: 80px;
+  display:flex;
+  z-index: 1;
+  // margin-left: 30px;
+  // margin-right: 30px;
+  justify-content: space-between;
+  align-items: center;
+  background: #1C1E22;
+  border-radius: 4px;
+}
+
+.f-button{
+  background: #2E3238;
+  width: 180px;
+  height: 40px;
+  border-radius: 8px;
+  display:flex;
+  justify-content: left;
+  align-items: center;
+}
+
+.f-button:hover{
+  cursor:pointer;
+  border: 2px solid #9A9A9A;
+}
+.f-button-text{
+  height: 24px;
+  /* Font Medium */
+  font-family: 'Poppins';
+  font-style: normal;
+  font-weight: 600;
+  font-size: 16px;
+  line-height: 24px;
+  margin-left: 8px;
+  /* identical to box height, or 150% */
+  /* Dark theme/Typography */
+  color: #F2F2F2;
+  /* Inside auto layout */
+  flex: none;
+  order: 1;
+  flex-grow: 0;
+}
+//
+.searchbar{
+  background: #2E3238;
+  height: 40px;
+  width: 100%;
+  border-radius: 8px;
+  margin-left: 20px;
+  margin-right: 20px;
+  display:flex;
+  align-items: center;
+  justify-content: left;
+}
+
+.searchbar:hover{
+  cursor:text;
+  border: 2px solid #9A9A9A;
+}
+
+.search-input{
+  width:90%;
+  background:transparent;
+  border:none;
+  outline: 0;
+  color: #F2F2F2;
+  font-family: 'Poppins';
+  font-style: normal;
+  font-weight: 600;
+}
+
+.cus{
+  background: transparent;
+  color: #F2F2F2;
+  font-family: 'Poppins';
+  font-style: normal;
+  font-weight: 600;
+  border:none;
+  outline:0;
+  margin-right:4px;
+}
+
+//Matcalendar
+::ng-deep .mat-calendar-table-header, ::ng-deep .mat-calendar-body-label {
+  color: #F2F2F2;
+}
+
+::ng-deep .mat-calendar-arrow {
+  border-top-color: #F2F2F2;
+}
+
+::ng-deep .mat-calendar-body-cell-content, ::ng-deep .mat-date-range-input-separator {
+  color: #d8d8d8;
+  border-color: transparent;
+}
+
+::ng-deep .mat-calendar-body-selected {
+  background-color: #3F80E9;
+  color: #1C1E22;
+}
+
+::ng-deep .mat-calendar-body-today:not(.mat-calendar-body-selected):not(.mat-calendar-body-comparison-identical) {
+  border-color: #3F80E9;
+}
+
+::ng-deep .mat-calendar-table-header-divider:after {
+  background: #3F80E9;
+  height:2px;
+}
+
+
+.mat-card{
+  background: transparent;
+  color: #d8d8d8;
+}
+
+.filters-page{
+  height:470px;
+}
+
+.form-control{
+  background: transparent;
+  color:#d8d8d8;
+}
+
+::-webkit-calendar-picker-indicator {
+  filter: invert(100%) sepia(30%) saturate(0%) hue-rotate(203deg) brightness(90%) contrast(95%);
+}
+
+//listings page
+.listing-container{
+  z-index: 0;
+  width: 95%;
+  height:200px;
+  margin-left:36px;
+  margin-right:2px;
+}
+
+.btn-secondary {
+  color: #fff;
+  background-color: #3F80E9;
+  border-color: #3F80E9;
+}
+
+.top{
+  display:flex;
+}

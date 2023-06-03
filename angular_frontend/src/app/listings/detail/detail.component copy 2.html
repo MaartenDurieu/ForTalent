@@ -1,0 +1,68 @@
+<div class="row-container">
+<div *ngIf="listing" class="group-container">
+  <img class="listing-img" [src]="listing.listingPicture ? listing.listingPicture : image.getPlaceholderImage()">
+    <div class="listing-info-container">
+      <div class="listing-info-header">
+      <p class="title-text">{{listing.title}}</p>
+      <p class="info-text"><i class="fa fa-calendar" style="font-size: 20px;margin-right: 6px;"></i>{{listing.date}}</p>
+      <p class="info-text"><i class="fa fa-clock" style="font-size: 20px;margin-right: 4px;"></i>{{listing.startTime}} to {{listing.endTime}}</p>
+      <p class="info-text"><i class="fa fa-map-pin" style="margin-right: 10px;margin-left: 2px;"></i>{{listing.location}}</p>
+    </div>
+    <div class="display-price-container">
+      <p style="font-size:26px; margin:-5px;">Suggested</p>
+      <div style="display:flex">
+      <p style="font-size:42px; margin:0;">€{{listing.suggestedPrice}}</p>
+      <p style="font-size:26px; margin:0;">/hr</p>
+    </div>
+    </div>
+    </div>
+</div>
+</div>
+
+<div class="page-container">
+  <div class="page-blog-post-card">
+    <div class="page-container1">
+      <div class="page-container2">
+        <span class="page-text">ENTERPRISE</span>
+        <span class="page-text1">Genres:</span>
+      </div>
+      <h1 class="page-text2">Description</h1>
+      <span class="page-text3">
+        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed non
+        volutpat turpis. Mauris luctus rutrum mi ut rhoncus. Integer in
+        dignissim tortor. Lorem ipsum dolor sit amet, consectetur adipiscing ...
+      </span>
+      <div class="page-container3">
+        <div class="page-profile">
+          <img
+            alt="profile"
+            src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?ixid=Mnw5MTMyMXwwfDF8c2VhcmNofDd8fHBvcnRyYWl0fGVufDB8fHx8MTYyNjM3ODk3Mg&amp;ixlib=rb-1.2.1&amp;w=200"
+            class="page-image"
+          />
+          <span class="page-text4">Jane Doe</span>
+        </div>
+        <span class="page-text5">Read More -&gt;</span>
+      </div>
+    </div>
+  </div>
+</div>
+<!---->
+<div class="row-container">
+  <div *ngIf="listing" class="group-container2">
+    <img class="organiser-img"[src]="maker.profilePicture ? maker.profilePicture: image.getUserPlaceholderImage()">          
+    <div class="review-info-container">
+              <p class="organiser-name">{{maker.displayName}}</p>
+              <!-- <ngb-rating max="5" [(rate)]="review.score" readonly="true"> -->
+                <div class="review-score-container">
+                <ngb-rating max="5" readonly="true" style="font-size: 18px;margin-left:4px;">
+              </ngb-rating><p style="font-size:14px;margin-top:2px;">(x)</p>
+            </div>
+            </div>
+            <p class="info-text2">Is looking for:</p>
+            <div class="review-info-container">
+              <p class="info-text2"><b>Performer(s):</b> {{listing.artistType}}</p>
+              <p class="info-text2"><b>Genre(s):</b> {{listing.genre}}</p>
+            </div>
+          
+</div>
+</div>

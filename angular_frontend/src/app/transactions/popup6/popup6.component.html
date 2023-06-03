@@ -1,0 +1,38 @@
+<h2 mat-dialog-title><b>EDIT</b></h2>
+<mat-dialog-content class="mat-typography">
+  <h3>Provided details</h3> 
+  <select name="gType" id="aType" style="width:80%;margin-bottom:20px;" [(ngModel)]="data.genre"> 
+    <option *ngFor="let t of this.Genres"
+    [value]="t" [selected]="t===genre">{{t}}
+    </option>
+  </select>
+ <br>
+ <select name="gType" id="gType"  style="width:80%;margin-bottom:30px;" [(ngModel)]="data.artistType">
+  <option *ngFor="let g of this.ArtistTypes"
+  [value]="g" [selected]="g===artistType">{{g}}
+  </option>
+</select>
+ <br>
+ <div class="input-group" style="margin-bottom:10px;margin-top:-14px">
+ <h3>Proposed €/hr</h3> 
+  <input required="" type="number"  id="price" value={{editprice}}>
+
+</div>
+<h3>Message (optional)</h3> 
+<textarea 
+                  id="textareaMessage"
+                  placeholder="Add Motivation (Optional)"
+                  id="message"
+                  maxlength="300"
+                  value={{data.message}}
+                  [(ngModel)]="data.message"
+                  rows="5"
+                  ></textarea>
+</mat-dialog-content>
+
+<mat-dialog-actions>
+  <div style="display:flex; width:100%; justify-content:left">
+  <button mat-button mat-dialog-close (click)="closeClick()" class="submit" style="width:200px; margin-right:10px">Return</button>
+  <button mat-button [mat-dialog-close]="true" (click)="accept()" class="submit" style="width:200px">Make edit</button>
+</div>
+</mat-dialog-actions>

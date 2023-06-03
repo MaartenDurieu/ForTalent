@@ -1,0 +1,309 @@
+<app-loading-spinner *ngIf="isLoading"></app-loading-spinner>
+<div *ngIf="isLoading==false">
+
+  <div class="page-container" *ngIf="venueAccount">
+    <button (click)="logger()"></button>
+    <div class="page-container1">
+      <div class="page-container2">
+        <div class="col">
+            <div class="row" *ngFor="let t of filteredVenueProposals()">
+                <!-- Proposal info -->
+                <div class="col">
+                   <div class="card-body">
+                     <div class="row no-gutters">
+               
+                       <!-- Title -->
+                       <h2 class="card-title">
+                           {{t.listingID}}
+                         </h2>
+                         <br>
+               
+                       <!-- Proposal Details -->
+                       <div>
+                           <div *ngIf="t.time">Date: <b>{{t.time}}</b></div>
+                           <div>artist: <b>{{t.artistType}}</b></div>
+                           <div>genre: <b>{{t.genre}}</b></div>
+                           <div *ngIf="t.suggestedPay">You suggested: € <b>{{t.suggestedPay}}</b>/hr</div>
+                           <div *ngIf="t.message">Attached Message: <b>{{t.message}}</b></div>
+                         </div>
+                       </div>
+                   </div>
+                </div>
+            </div>
+        </div>
+      </div>
+      <div class="page-container3">
+        <div class="col">
+            <div class="row" *ngFor="let t of filteredArtistProposals()">
+                <!-- Proposal info -->
+                <div class="col">
+                   <div class="card-body">
+                     <div class="row no-gutters">
+               
+                       <!-- Title -->
+                       <h2 class="card-title">
+                           {{t.listingID}}
+                         </h2>
+                         <br>
+               
+                       <!-- Proposal Details -->
+                       <div>
+                           <div *ngIf="t.time">Date: <b>{{t.time}}</b></div>
+                           <div>artist: <b>{{t.artistType}}</b></div>
+                           <div>genre: <b>{{t.genre}}</b></div>
+                           <div *ngIf="t.suggestedPay">They suggested: € <b>{{t.suggestedPay}}</b>/hr</div>
+                           <div *ngIf="t.message">Attached Message: <b>{{t.message}}</b></div>
+                         </div>
+                       </div>
+                   </div>
+                </div>
+            </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="page-container" *ngIf="artistAccount">
+    <button (click)="logger()"></button>
+    <div class="page-container1">
+      <div class="page-container2">
+        <div class="col">
+            <div class="row" *ngFor="let t of filteredArtistProposals()">
+                <!-- Proposal info -->
+                <div class="col">
+                   <div class="card-body">
+                     <div class="row no-gutters">
+               
+                       <!-- Title -->
+                       <h2 class="card-title">
+                           {{t.listingID}}
+                         </h2>
+                         <br>
+               
+                       <!-- Proposal Details -->
+                       <div>
+                           <div *ngIf="t.time">Date: <b>{{t.time}}</b></div>
+                           <div>artist: <b>{{t.artistType}}</b></div>
+                           <div>genre: <b>{{t.genre}}</b></div>
+                           <div *ngIf="t.suggestedPay">You suggested: € <b>{{t.suggestedPay}}</b>/hr</div>
+                           <div *ngIf="t.message">Attached Message: <b>{{t.message}}</b></div>
+                         </div>
+                       </div>
+                   </div>
+                </div>
+            </div>
+        </div>
+      </div>
+      <div class="page-container3">
+        <div class="col">
+            <div class="row" *ngFor="let t of filteredVenueProposals()">
+                <!-- Proposal info -->
+                <div class="col">
+                   <div class="card-body">
+                     <div class="row no-gutters">
+               
+                       <!-- Title -->
+                       <h2 class="card-title">
+                           {{t.listingID}}
+                         </h2>
+                         <br>
+               
+                       <!-- Proposal Details -->
+                       <div>
+                           <div *ngIf="t.time">Date: <b>{{t.time}}</b></div>
+                           <div>artist: <b>{{t.artistType}}</b></div>
+                           <div>genre: <b>{{t.genre}}</b></div>
+                           <div *ngIf="t.suggestedPay">They suggested: € <b>{{t.suggestedPay}}</b>/hr</div>
+                           <div *ngIf="t.message">Attached Message: <b>{{t.message}}</b></div>
+                         </div>
+                       </div>
+                   </div>
+                </div>
+            </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+
+
+  <div *ngIf="incoming">
+    <h1>This is their last proposal:</h1>
+    <div class="row" *ngIf="artistProposal">
+      <!-- Proposal info -->
+      <div class="col">
+      <div class="card-body">
+          <div class="row no-gutters">
+    
+          <!-- Title -->
+          <h2 class="card-title">
+              {{artistProposal.listingID}}
+              </h2>
+              <br>
+    
+          <!-- Proposal Details -->
+          <div>
+              <div *ngIf="artistProposal.time">Date: <b>{{artistProposal.time}}</b></div>
+              <div>artist: <b>{{artistProposal.artistType}}</b></div>
+              <div>genre: <b>{{artistProposal.genre}}</b></div>
+              <div *ngIf="artistProposal.suggestedPay">You suggested: € <b>{{artistProposal.suggestedPay}}</b>/hr</div>
+              <div *ngIf="artistProposal.message">Attached Message: <b>{{artistProposal.message}}</b></div>
+    
+              <button (click)="openDialog(artistProposal.suggestedPay,artistProposal.transactionID,artistProposal.listingID, artistProposal.artistID, artistProposal.venueID, artistProposal.suggestedPay)"
+              >Accept offer</button>
+            <button (click)="openDialog3(artistProposal.suggestedPay, artistProposal.listingID,artistProposal.artistID,artistProposal.venueID)"
+            >Reject offer</button>
+            <div id = {{artistProposal.transactionID}} style="display:none">
+              <input
+                        type="number"
+                        min=1
+                        id="pay{{artistProposal.transactionID}}"
+                        value={{artistProposal.suggestedPay}}>
+              <textarea 
+                        id="message{{artistProposal.transactionID}}"
+                        class="form-control" 
+                        placeholder="add motivation (optional)"
+                        maxlength="300"
+                        rows="5"></textarea>
+                      </div>
+              <button (click)="makeProposal(artistProposal.transactionID, artistProposal.listingID,artistProposal.artistID,artistProposal.venueID, artistProposal.genre, artistProposal.artistType)">Make another proposal</button>
+              </div>
+          </div>
+      </div>
+      </div>
+    </div>
+    <div class="row" *ngIf="venueProposal">
+    <!-- Proposal info -->
+    <div class="col">
+    <div class="card-body">
+        <div class="row no-gutters">
+    
+        <!-- Title -->
+        <h2 class="card-title">
+            {{venueProposal.listingID}}
+            </h2>
+            <br>
+    
+        <!-- Proposal Details -->
+        <div>
+            <div *ngIf="venueProposal.time">Date: <b>{{venueProposal.time}}</b></div>
+            <div>artist: <b>{{venueProposal.artistType}}</b></div>
+            <div>genre: <b>{{venueProposal.genre}}</b></div>
+            <div *ngIf="venueProposal.suggestedPay">You suggested: € <b>{{venueProposal.suggestedPay}}</b>/hr</div>
+            <div *ngIf="venueProposal.message">Attached Message: <b>{{venueProposal.message}}</b></div>
+            
+            <button (click)="openDialog2(venueProposal.suggestedPay,venueProposal.transactionID,venueProposal.listingID, venueProposal.artistID, venueProposal.venueID, venueProposal.suggestedPay)"
+            >Accept offer</button>
+            <button (click)="openDialog3(venueProposal.suggestedPay, venueProposal.listingID,venueProposal.artistID,venueProposal.venueID)"
+            >Reject offer</button>
+            <div id = {{venueProposal.transactionID}} style="display:none">
+              <input
+                        type="number"
+                        min=1
+                        id="pay{{venueProposal.transactionID}}"
+                        value={{venueProposal.suggestedPay}}>
+              <textarea 
+                        id="message{{venueProposal.transactionID}}"
+                        class="form-control" 
+                        placeholder="add motivation (optional)"
+                        maxlength="300"
+                        rows="5"></textarea>
+                      </div>
+              <button (click)="makeProposal(venueProposal.transactionID, venueProposal.listingID,venueProposal.artistID,venueProposal.venueID, venueProposal.genre, venueProposal.artistType)">Make another proposal</button>
+          </div>
+        </div>
+    </div>
+    </div>
+    </div>
+    </div>
+
+    <div *ngIf="outgoing">
+      <h1>This is your last proposal:</h1>
+      <div class="row" *ngIf="artistProposal">
+        <!-- Proposal info -->
+        <div class="col">
+        <div class="card-body">
+            <div class="row no-gutters">
+    
+            <!-- Title -->
+            <h2 class="card-title">
+                {{artistProposal.listingID}}
+                </h2>
+                <br>
+    
+            <!-- Proposal Details -->
+            <div>
+                <div *ngIf="artistProposal.time">Date: <b>{{artistProposal.time}}</b></div>
+                <div>artist: <b>{{artistProposal.artistType}}</b></div>
+                <div>genre: <b>{{artistProposal.genre}}</b></div>
+                <div *ngIf="artistProposal.suggestedPay">You suggested: € <b>{{artistProposal.suggestedPay}}</b>/hr</div>
+                <div *ngIf="artistProposal.message">Attached Message: <b>{{artistProposal.message}}</b></div>
+    
+                <div id={{artistProposal.transactionID}} style="display:none">
+                  <input
+                      type="number"
+                      min=1
+                      id="pay{{artistProposal.transactionID}}"
+                      value={{artistProposal.suggestedPay}}>
+                      <textarea 
+                      id="message{{artistProposal.transactionID}}"
+                      placeholder="(optional) add motivation"
+                      class="form-control"
+                      value={{artistProposal.message}}
+                      maxlength="300"
+                      rows="5"></textarea>
+                    </div>
+                  <button (click)="activateEdit(artistProposal.transactionID, artistProposal.artistID, artistProposal.venueID)">Edit offer</button>
+                  <button (click)="openDialog4(artistProposal.suggestedPay,artistProposal.listingID,artistProposal.artistID,artistProposal.venueID)"
+                  >Cancel offer</button>
+                </div>
+            </div>
+        </div>
+        </div>
+    </div>
+    <div class="row" *ngIf="venueProposal">
+      <!-- Proposal info -->
+      <div class="col">
+      <div class="card-body">
+          <div class="row no-gutters">
+    
+          <!-- Title -->
+          <h2 class="card-title">
+              {{venueProposal.listingID}}
+              </h2>
+              <br>
+    
+          <!-- Proposal Details -->
+          <div>
+              <div *ngIf="venueProposal.time">Date: <b>{{venueProposal.time}}</b></div>
+              <div>artist: <b>{{venueProposal.artistType}}</b></div>
+              <div>genre: <b>{{venueProposal.genre}}</b></div>
+              <div *ngIf="venueProposal.suggestedPay">You suggested: € <b>{{venueProposal.suggestedPay}}</b>/hr</div>
+              <div *ngIf="venueProposal.message">Attached Message: <b>{{venueProposal.message}}</b></div>
+    
+              <div id={{venueProposal.transactionID}} style="display:none">
+                <input
+                    type="number"
+                    min=1
+                    id="pay{{venueProposal.transactionID}}"
+                    value={{venueProposal.suggestedPay}}>
+                    <textarea 
+                    id="message{{venueProposal.transactionID}}"
+                    placeholder="(optional) add motivation"
+                    class="form-control"
+                    value={{venueProposal.message}}
+                    maxlength="300"
+                    rows="5"></textarea>
+                  </div>
+                <button (click)="activateEdit(venueProposal.transactionID, venueProposal.artistID, venueProposal.venueID)">Edit offer</button>
+                <button (click)="openDialog4(venueProposal.suggestedPay,venueProposal.listingID,venueProposal.artistID,venueProposal.venueID)"
+                >Cancel offer</button>
+              </div>
+          </div>
+      </div>
+      </div>
+    </div>
+    </div>
+
+</div>

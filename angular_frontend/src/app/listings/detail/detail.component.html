@@ -1,0 +1,392 @@
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+<div class="page-container" *ngIf="listing">
+  <app-loading-spinner *ngIf="isLoading"></app-loading-spinner>
+  <div class="column-container">
+  <div class="top-container">
+  <div class="db-listing-header">
+    <div class="left-header">
+    <img class="listing-img" [src]="listing.listingPicture ? listing.listingPicture : image.getPlaceholderImage()">
+    <div class="title-container">
+    <div class="title">{{listing.title}}</div>
+    <div class="rating-container">
+      <ngb-rating max=5 [(rate)]="maker.reviewScore" readonly="true" *ngIf="maker.reviewScore">
+        <ng-template let-fill="fill" let-index="index">
+          <span [class]="'rating-star-back' + (fill === 100 ? '-filled' : '')">
+            <span class="rating-star-front" [style]="'width:' + fill + '%'">
+              &#9733;
+            </span>
+            &#9733;
+          </span>
+        </ng-template>
+      </ngb-rating>
+      <div style="margin-top:6px;">
+      <p style="color:orange;">({{maker.reviewScore ? maker.reviewScore:"No reviews"}})</p>
+    </div>
+    </div>
+    
+  </div>
+  </div>
+</div>
+<div class="right-header">
+  <div class="date">{{listing.date | date:'d MMMM y'}}</div>
+  <div class="time">{{listing.startTime.substring(0,5)}} - {{listing.endTime.substring(0,5)}}</div>
+
+</div>
+  </div>
+  <div class="bottom-container">
+  <div class="left-info-container">
+    <div class="container-s">
+    <div class="description-text">Organiser</div>
+    <div class="profile-clicker" [routerLink]="['/profileDisplay', maker.userID]">
+      <div class="organiser-picture" style="margin-right:4px; margin-left:4px;">
+      <img style="border-radius: 50%; height: 80%; width: 80%" [src]="maker.profilePicture">
+    </div>
+      <div class="organiser-name" style="margin-right:4px;">
+      {{maker.displayName}}
+    </div>
+  </div>
+  </div>
+  <div class="container-s">
+    <div class="description-text">Suggested Pay</div>
+    <div class="info-price">
+      €{{listing.suggestedPrice}}/hr</div>
+  </div>
+  <div class="container-s">
+    <div class="description-text">Info</div>
+    <div class="info-item">Looking for: {{listing.artistType}}</div>
+    <div class="info-item">Genre(s): {{listing.genre}}</div>
+  </div>
+  <div class="container-s">
+    <div class="description-text">Description</div>
+    <div class="info-item">
+    {{listing.description}}</div>
+  </div>
+  </div>
+  <div class="right-info-container">
+  <div class="map-info-container">
+    <div class="description-text">Location</div>
+    <div class="map">
+      <img src="https://boostcreators.nl/wp-content/uploads/Boost-Creators-op-Google-Maps.jpg" class="map-picture">
+    </div>
+    <div class="addy">
+      {{listing.location}}
+    </div>
+  </div>
+  <form [formGroup]="form" (ngSubmit)="createTransaction()"  id="formProposal" style="display:none">
+  <div class="container-s">
+    <div></div>
+    <div class="description-text">Make proposal</div>
+    <div class="info-item" style="margin-top:20px; margin-bottom:10px;">
+      <div class="text-seperator">Suggested €/hr</div>
+      <input required="" type="number" formControlName="suggestedPay">
+    </div>
+    <div class="selector">
+      As:
+      <select name="aType" id="aType" formControlName="artistType" class="select-debug">
+        <option *ngFor="let t of ArtistTypes" 
+        [value]="t">{{t}}
+        </option>
+      </select>
+      For:
+      <select name="gType" id="gType" formControlName="genre" class="select-debug">
+        <option *ngFor="let g of genres"
+        [value]="g">{{g}}
+        </option>
+      </select>
+    </div>
+    <div class="writeMessage" style="margin-bottom:10px;margin-top:10px;">
+     
+      <textarea 
+                  formControlName="message" 
+                  placeholder="Add Motivation (optional)"
+                  maxlength="300"
+                  rows="5"></textarea>
+                 
+    </div>
+    <button
+                value=""
+                type="submit"
+                [disabled]="!form.getRawValue().suggestedPay || !form.getRawValue().genre || !form.getRawValue().artistType" class="submit">
+                Make proposal
+              </button>
+  </div>
+</form>
+<!------------------------------------------------------------->
+<!--Artist Awaiting-->
+<div class="container-s" *ngIf="(awaiting && artistAccount)">
+  <p class="proposal-title"> Awaiting Payment from venue</p>
+  <div class="proposal" *ngFor="let ai of filteredAwaiting">
+    <div class="left-proposal">
+      <div class="p-details" style="justify-content: left;">
+      <div class="p-containers">
+      <div class="proposer">
+        <div class="proposer-pic">
+          <img [src]="user.getProfilePicture()" style="width:100%;height:100%;border-radius: 50%;">
+        </div>
+        <div class="proposer-name">{{user.getUserName()}}</div>
+      </div>
+      <div class="details">
+        {{ai.artistType}}-{{ai.genre}}
+      </div>
+    </div> 
+  </div>     
+    <div class="proposal-price">
+      €{{ai.suggestedPay}}/hr
+    </div>
+    </div>
+    <div class="right-proposal">
+      <!--Wait-->
+      <div class="proposal-button" style="width:32px;display:flex;justify-content: center;align-items: center;">
+        <svg width="30" height="30" viewBox="0 0 30 30" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M15 23.75C19.8325 23.75 23.75 19.8325 23.75 15C23.75 10.1675 19.8325 6.25 15 6.25C10.1675 6.25 6.25 10.1675 6.25 15C6.25 19.8325 10.1675 23.75 15 23.75Z" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          <path d="M15 11.25V15L16.875 16.875" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          <path d="M20.6376 21.6875L20.2001 26.475C20.1438 27.0983 19.8557 27.6778 19.3928 28.0991C18.93 28.5203 18.3259 28.7526 17.7001 28.75H12.2876C11.6618 28.7526 11.0577 28.5203 10.5949 28.0991C10.132 27.6778 9.84392 27.0983 9.7876 26.475L9.3501 21.6875M9.3626 8.31252L9.8001 3.52502C9.85623 2.90387 10.1425 2.32613 10.6027 1.90521C11.063 1.4843 11.6639 1.25061 12.2876 1.25002H17.7251C18.3509 1.24748 18.955 1.47977 19.4178 1.90099C19.8807 2.32221 20.1688 2.90172 20.2251 3.52502L20.6626 8.31252" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+          
+      </div>
+    </div>
+  </div>
+</div>
+<!--Venue Awaiting-->
+<div class="container-s" *ngIf="filteredVenueAwaiting().length>0">
+  <p class="proposal-title"> Awaiting Payment from you</p>
+  <div class="proposal" *ngFor="let ai of filteredVenueAwaiting()">
+    <div class="left-proposal">
+      <div class="p-details" style="justify-content: left;">
+      <div class="p-containers">
+      <div class="proposer" [routerLink]="['/profileDisplay', ai.user.userID]">
+        <div class="proposer-pic">
+          <img [src]="ai.user.profilePicture" style="width:100%;height:100%;border-radius: 50%;">
+        </div>
+        <div class="proposer-name">{{ai.user.displayName}}</div>
+      </div>
+      <div class="details">
+        {{ai.artistType}}-{{ai.genre}}
+      </div>
+    </div> 
+  </div>     
+    <div class="proposal-price">
+      €{{ai.suggestedPay}}/hr
+    </div>
+    </div>
+    <div class="right-proposal">
+      <!--Pay-->
+      <div class="proposal-button" style="width:32px;display:flex;justify-content: center;align-items: center;" (click)="pay(ai.listingID, ai.artistID, ai.venueID)">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M9 22C9.55228 22 10 21.5523 10 21C10 20.4477 9.55228 20 9 20C8.44772 20 8 20.4477 8 21C8 21.5523 8.44772 22 9 22Z" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          <path d="M20 22C20.5523 22 21 21.5523 21 21C21 20.4477 20.5523 20 20 20C19.4477 20 19 20.4477 19 21C19 21.5523 19.4477 22 20 22Z" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          <path d="M1 1H5L7.68 14.39C7.77144 14.8504 8.02191 15.264 8.38755 15.5583C8.75318 15.8526 9.2107 16.009 9.68 16H19.4C19.8693 16.009 20.3268 15.8526 20.6925 15.5583C21.0581 15.264 21.3086 14.8504 21.4 14.39L23 6H6" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+      </div>
+    </div>
+  </div>
+</div>
+<!------------------------------------------------------------->
+<!--Venue Outgoing-->
+<div class="container-s" *ngIf="filteredVenueOutgoing().length>0">
+  <p class="proposal-title">You proposed</p>
+  <div class="proposal" *ngFor="let ai of filteredVenueOutgoing()">
+    <div class="left-proposal">
+      <div class="p-details">
+      <div class="p-containers">
+      <div class="proposer" [routerLink]="['/profileDisplay', ai.user.userID]">
+        <div class="proposer-pic">
+          <img [src]="ai.user.profilePicture" style="width:100%;height:100%;border-radius: 50%;">
+        </div>
+        <div class="proposer-name">{{ai.user.displayName}}</div>
+      </div>
+      <div class="details">
+        {{ai.artistType}}-{{ai.genre}}
+      </div>
+    </div>
+    <div class="proposal-button" (click)="openDialog5(ai.message)">
+      <svg width="30" height="30" viewBox="0 0 30 30" fill="none" xmlns="http://www.w3.org/2000/svg" *ngIf="ai.message">
+        <path d="M16.6667 3.33337H3.33341C2.41675 3.33337 1.66675 4.08337 1.66675 5.00004V15C1.66675 15.9167 2.41675 16.6667 3.33341 16.6667H16.6667C17.5834 16.6667 18.3334 15.9167 18.3334 15V5.00004C18.3334 4.08337 17.5834 3.33337 16.6667 3.33337Z" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        <path d="M18.3334 5L10.0001 10.8333L1.66675 5" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </div>   
+  </div>     
+    <div class="proposal-price">
+      €{{ai.suggestedPay}}/hr
+    </div>
+    </div>
+    <div class="right-proposal">
+      <!--Edit-->
+      <div class="proposal-button" style="width:32px;display:flex;justify-content: center;align-items: center;" (click)="activateEdit(ai.transactionID, ai.artistID, ai.venueID, ai.genre, ai.artistType, ai.suggestedPay, ai.message)">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M11 4H4C3.46957 4 2.96086 4.21071 2.58579 4.58579C2.21071 4.96086 2 5.46957 2 6V20C2 20.5304 2.21071 21.0391 2.58579 21.4142C2.96086 21.7893 3.46957 22 4 22H18C18.5304 22 19.0391 21.7893 19.4142 21.4142C19.7893 21.0391 20 20.5304 20 20V13" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          <path d="M20 1.87866C19.4374 1.87866 18.8978 2.10216 18.5 2.49998L9 12L8 16L12 15L21.5 5.49998C21.8978 5.10216 22.1213 4.56259 22.1213 3.99998C22.1213 3.43737 21.8978 2.89781 21.5 2.49998C21.1022 2.10216 20.5626 1.87866 20 1.87866Z" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+                           
+      </div>
+      <!--Refuse-->
+      <div class="proposal-button" (click)="openDialog4(ai.suggestedPay, ai.listingID,ai.artistID,ai.venueID)">
+        <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg" style="margin-top:2px;">
+          <path d="M24 8L8 24" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          <path d="M8 8L24 24" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg> 
+      </div>
+    </div>
+  </div>
+</div>
+
+<!--Artist Incoming-->
+<div class="container-s" *ngIf="transactionsIncoming.length>0">
+  <p class="proposal-title">You received</p>
+  <div class="proposal" *ngFor="let ai of transactionsIncoming">
+    <div class="left-proposal">
+      <div class="p-details">
+      <div class="p-containers">
+      <div class="proposer">
+        <div class="proposer-pic">
+          <img [src]="ai.user.profilePicture" style="width:100%;height:100%;border-radius: 50%;">
+        </div>
+        <div class="proposer-name">{{ai.user.displayName}}</div>
+      </div>
+      <div class="details">
+        {{ai.artistType}}-{{ai.genre}}
+      </div>
+    </div>
+    <div class="proposal-button" (click)="openDialog5(ai.message)">
+      <svg width="30" height="30" viewBox="0 0 30 30" fill="none" xmlns="http://www.w3.org/2000/svg" *ngIf="ai.message">
+        <path d="M16.6667 3.33337H3.33341C2.41675 3.33337 1.66675 4.08337 1.66675 5.00004V15C1.66675 15.9167 2.41675 16.6667 3.33341 16.6667H16.6667C17.5834 16.6667 18.3334 15.9167 18.3334 15V5.00004C18.3334 4.08337 17.5834 3.33337 16.6667 3.33337Z" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        <path d="M18.3334 5L10.0001 10.8333L1.66675 5" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </div>   
+  </div>     
+    <div class="proposal-price">
+      €{{ai.suggestedPay}}/hr
+    </div>
+    </div>
+    <div class="right-proposal">
+      <!--Accept-->
+      <div class="proposal-button"  (click)="openDialog2(ai.suggestedPay, ai.transactionID, ai.listingID ,ai.artistID, ai.venueID, ai.genre, ai.artistType)">
+        <svg width="30" height="30" viewBox="0 0 30 30" fill="none" xmlns="http://www.w3.org/2000/svg" style="margin-top:4px;">
+          <path d="M25 7.5L11.25 21.25L5 15" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>              
+      </div>
+      <!--Negotiation-->
+      <div class="proposal-button" (click)="openNegotiation(ai.listingID, ai.transactionID, ai.artistID, ai.venueID, ai.genre, ai.artistType, ai.suggestedPay)">
+        <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg" style="margin-top:2px;">
+          <path d="M20 13.3333L26.6667 20L20 26.6666" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          <path d="M5.33325 5.33331V14.6666C5.33325 16.0811 5.89515 17.4377 6.89535 18.4379C7.89554 19.4381 9.2521 20 10.6666 20H26.6666" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>          
+      </div>
+      <!--Refuse-->
+      <div class="proposal-button" (click)="openDialog3(ai.suggestedPay, ai.listingID,ai.artistID,ai.venueID)">
+        <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg" style="margin-top:2px;">
+          <path d="M24 8L8 24" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          <path d="M8 8L24 24" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg> 
+      </div>
+    </div>
+  </div>
+</div>
+
+<!--Artist Outgoing-->
+<div class="container-s" *ngIf="transactionsOutgoing.length>0">
+  <p class="proposal-title">You proposed</p>
+  <div class="proposal" *ngFor="let ai of transactionsOutgoing">
+    <div class="left-proposal">
+      <div class="p-details">
+      <div class="p-containers">
+      <div class="proposer">
+        <div class="proposer-pic">
+          <img [src]="user.getProfilePicture()" style="width:100%;height:100%;border-radius: 50%;">
+        </div>
+        <div class="proposer-name">{{user.getUserName()}}</div>
+      </div>
+      <div class="details">
+        {{ai.artistType}}-{{ai.genre}}
+      </div>
+    </div>
+    <div class="proposal-button" (click)="openDialog5(ai.message)">
+      <svg width="30" height="30" viewBox="0 0 30 30" fill="none" xmlns="http://www.w3.org/2000/svg" *ngIf="ai.message">
+        <path d="M16.6667 3.33337H3.33341C2.41675 3.33337 1.66675 4.08337 1.66675 5.00004V15C1.66675 15.9167 2.41675 16.6667 3.33341 16.6667H16.6667C17.5834 16.6667 18.3334 15.9167 18.3334 15V5.00004C18.3334 4.08337 17.5834 3.33337 16.6667 3.33337Z" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        <path d="M18.3334 5L10.0001 10.8333L1.66675 5" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </div>   
+  </div>     
+    <div class="proposal-price">
+      €{{ai.suggestedPay}}/hr
+    </div>
+    </div>
+    <div class="right-proposal">
+      <!--Edit-->
+      <div class="proposal-button" style="width:32px;display:flex;justify-content: center;align-items: center;" (click)="activateEdit(ai.transactionID, ai.artistID, ai.venueID, ai.genre, ai.artistType, ai.suggestedPay, ai.message)">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M11 4H4C3.46957 4 2.96086 4.21071 2.58579 4.58579C2.21071 4.96086 2 5.46957 2 6V20C2 20.5304 2.21071 21.0391 2.58579 21.4142C2.96086 21.7893 3.46957 22 4 22H18C18.5304 22 19.0391 21.7893 19.4142 21.4142C19.7893 21.0391 20 20.5304 20 20V13" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          <path d="M20 1.87866C19.4374 1.87866 18.8978 2.10216 18.5 2.49998L9 12L8 16L12 15L21.5 5.49998C21.8978 5.10216 22.1213 4.56259 22.1213 3.99998C22.1213 3.43737 21.8978 2.89781 21.5 2.49998C21.1022 2.10216 20.5626 1.87866 20 1.87866Z" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+                           
+      </div>
+      <!--Refuse-->
+      <div class="proposal-button" (click)="openDialog4(ai.suggestedPay, ai.listingID,ai.artistID,ai.venueID)">
+        <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg" style="margin-top:2px;">
+          <path d="M24 8L8 24" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          <path d="M8 8L24 24" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg> 
+      </div>
+    </div>
+  </div>
+</div>
+
+<!--Venue Incoming-->
+<div class="container-s" *ngIf="filteredVenueIncoming().length>0">
+  <p class="proposal-title">You received proposals</p>
+  <div class="proposal" *ngFor="let ai of filteredVenueIncoming()">
+    <div class="left-proposal">
+      <div class="p-details">
+      <div class="p-containers">
+      <div class="proposer" [routerLink]="['/profileDisplay', ai.user.userID]">
+        <div class="proposer-pic">
+          <img [src]="ai.user.profilePicture" style="width:100%;height:100%;border-radius: 50%;">
+        </div>
+        <div class="proposer-name">{{ai.user.displayName}}</div>
+      </div>
+      <div class="details">
+        {{ai.artistType}}-{{ai.genre}}
+      </div>
+    </div>
+    <div class="proposal-button" (click)="openDialog5(ai.message)">
+      <svg width="30" height="30" viewBox="0 0 30 30" fill="none" xmlns="http://www.w3.org/2000/svg" *ngIf="ai.message">
+        <path d="M16.6667 3.33337H3.33341C2.41675 3.33337 1.66675 4.08337 1.66675 5.00004V15C1.66675 15.9167 2.41675 16.6667 3.33341 16.6667H16.6667C17.5834 16.6667 18.3334 15.9167 18.3334 15V5.00004C18.3334 4.08337 17.5834 3.33337 16.6667 3.33337Z" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        <path d="M18.3334 5L10.0001 10.8333L1.66675 5" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </div>   
+  </div>     
+    <div class="proposal-price">
+      €{{ai.suggestedPay}}/hr
+    </div>
+    </div>
+    <div class="right-proposal">
+      <!--Accept-->
+      <div class="proposal-button" (click)="openDialog(ai.suggestedPay, ai.transactionID, ai.listingID ,ai.artistID, ai.venueID, ai.suggestedPay, ai.genre, ai.artistType)">
+        <svg width="30" height="30" viewBox="0 0 30 30" fill="none" xmlns="http://www.w3.org/2000/svg" style="margin-top:4px;">
+          <path d="M25 7.5L11.25 21.25L5 15" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+                 
+        </div>
+      <!--Negotiation-->
+      <div class="proposal-button" (click)="openNegotiation(ai.listingID, ai.transactionID, ai.artistID, ai.venueID, ai.genre, ai.artistType, ai.suggestedPay)">
+        <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg" style="margin-top:2px;">
+          <path d="M20 13.3333L26.6667 20L20 26.6666" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          <path d="M5.33325 5.33331V14.6666C5.33325 16.0811 5.89515 17.4377 6.89535 18.4379C7.89554 19.4381 9.2521 20 10.6666 20H26.6666" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>          
+      </div>
+      <!--Refuse-->
+      <div class="proposal-button" (click)="openDialog3(ai.suggestedPay, ai.listingID,ai.artistID,ai.venueID)">
+        <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg" style="margin-top:2px;">
+          <path d="M24 8L8 24" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          <path d="M8 8L24 24" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg> 
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+</div>
+</div>
+</div>
+

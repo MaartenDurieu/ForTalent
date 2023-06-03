@@ -1,0 +1,66 @@
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css">
+
+<body>
+<div>
+  <div class="nav-top-bar">
+    <div class="navbar-title" routerLink="/listings" [ngClass]="{'active': currentUrl === '/listings'}">ForTalent</div>
+    <div class="navbar-buttons" *ngIf="user.isLoggedIn()">
+        <a routerLink="/profileDisplay" class="nav-link" [queryParams]="{Id:this.user.getId()}">
+          {{user.getUserName()}}
+          <img style="border-radius: 50%; height: 3Opx; width: 30px" [src]="user.getProfilePicture()">
+        </a>
+    </div>
+</div>
+<div class="filler" *ngIf="user.isLoggedIn()"></div>
+<div class="grid-container" *ngIf="user.isLoggedIn()">
+  <div class="nav-side-bar">
+    <div class="left-sidebar">
+      <div class="nav-items">
+        <span class="icon"  routerLink="/listings" [ngClass]="{'active': currentUrl === '/listings'}"
+        routerLinkActive="active">
+          <i class="fa fa-flag"></i>
+          <p>LISTING</p>
+        </span>
+        <span class="icon" routerLink="/mylistings" [ngClass]="{'active': currentUrl === '/mylistings'}"
+          routerLinkActive="active">
+          <i class="fa fa-clipboard-check"></i>
+          <p>MY LISTINGS</p>
+        </span>
+        <span class="icon" routerLink="/calendar" [ngClass]="{'active': currentUrl === '/calendar'}"
+          routerLinkActive="active">
+          <i class="fa fa-calendar-day"></i>
+          <p>CALENDAR</p>
+        </span>
+        <hr>
+          <span class="icon" routerLink="/transactions/userArtist" [ngClass]="{'active': currentUrl === '/transactions/userArtist'}"
+          routerLinkActive="active">
+          <i class="fa fa-envelope"></i>
+          <p>PROPOSALS</p>
+        </span>
+        <span class="icon" routerLink="/messages" [ngClass]="{'active': currentUrl === '/messages'}"
+        routerLinkActive="active">
+        <i class="fa fa-comment"></i>
+          <p>MESSAGES</p>
+        </span>
+        <span class="icon" routerLink="/reviews" [ngClass]="{'active': currentUrl === '/reviews'}"
+           routerLinkActive="active">
+          <i class="fa fa-star"></i>
+          <p>REVIEWS</p>
+        </span>
+        <div class="bottom-section">
+          <hr style="width:85%">
+            <span class="icon">
+              <i class="fa fa-arrow-alt-circle-right"></i>
+          <p routerLink="/login" (click)="user.logOut()">LOG OUT</p>
+        </span>
+          </div> 
+      </div>
+  </div>  
+  </div>
+  <div class="main-content">
+    <router-outlet></router-outlet>
+  </div>
+</div>
+</div>
+<router-outlet *ngIf="!user.isLoggedIn()"></router-outlet>
+</body>

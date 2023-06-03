@@ -1,0 +1,565 @@
+<!-- Only display listing when data is fetched and no error has occurred -->
+<div *ngIf="listing" class="d-flex justify-content-center" style="margin: 10px;">
+  <div class="container">
+    <!-- Row containing listing name + action buttons -->
+    <div class="row">
+      <!-- Listing name -->
+      <div class="col">
+        <h1>
+          {{ listing.title }}
+        </h1>
+      </div>
+      <!-- Action buttons -->
+      <div class="col-auto" *ngIf="user.getId() === listing.userID && listing.status !== 'cancelled'">
+        <div class="btn-group" role="group" *ngIf="listing.status=='active'">
+          <!-- Edit Listing -->
+          <button
+            class="btn btn-lg btn-success"
+            routerLink="/listings/form"
+            [queryParams]="{edit: listing.listingID}">
+              EDIT
+          </button>
+          <!-- Cancel Listing -->
+          <button
+            class="btn btn-lg btn-danger"
+            (click)="openDialogDelete(listing.listingID)">
+              delete
+          </button>
+        </div>
+      </div>
+      <button *ngIf="reviewable" [routerLink]="['/reviews', 'write', listing.listingID]">Write review</button>
+    </div>
+    <!-- Row containing Image + Window to make transaction -->
+    <div class="row">
+      <!-- Image -->
+      <div class="col-8">
+        <img
+          style="width: 75%;border-radius: 5px;"
+          [src]="listing.listingPicture ? listing.listingPicture : image.getPlaceholderImage()">
+      </div>
+      <!-- Window to make transaction -->
+      <div class="col">
+        <!-- Asking price -->
+        <h2>Asking Price:<b> €{{listing.suggestedPrice}}/hr</b></h2>
+
+      <!--Incoming venue-->
+      <b *ngIf="Incoming">You have incoming proposal(s) for this listing:</b>
+      <div class="card" *ngFor="let ai of filteredVenueIncoming()">
+        <div class="card-body">
+          <div class="row no-gutters">
+            <h2 class="card-title">
+              {{ai.listingID}}
+            </h2>
+            <br>
+  
+          <!-- Proposal Details -->
+          <div>
+              <div>Date: <b>{{ai.time}}</b></div>
+              <div>Suggested Pay: € <b>{{ai.suggestedPay}}</b>/hr</div>
+              <div>Attached Message: <b>{{ai.message}}</b></div>
+              <button (click)="openDialog(ai.suggestedPay, ai.transactionID, ai.listingID ,ai.artistID, ai.venueID, ai.suggestedPay)">Accept offer</button>
+              <button (click)="openDialog3(ai.suggestedPay, ai.listingID,ai.artistID,ai.venueID)">Reject offer</button>
+          <div id = {{ai.transactionID}} style="display:none">
+              <input
+                        type="number"
+                        min=1
+                        id="pay{{ai.transactionID}}"
+                        value={{ai.suggestedPay}}
+                        formControlName="suggestedPay">
+              <textarea 
+                        id="message{{ai.transactionID}}"
+                        class="form-control"
+                        formControlName="message" 
+                        placeholder="add motivation (optional)"
+                        maxlength="300"
+                        rows="5"></textarea>
+                      </div>
+              <button (click)="makeProposal(ai.transactionID, ai.listingID,ai.artistID,ai.venueID, ai.genre, ai.artistType)">Make another proposal</button>
+          </div>
+          </div>
+        </div>
+      </div>
+
+
+      <!--Incoming artist-->
+      <div class="card" *ngFor="let ai of transactionsIncoming">
+        <b>You have an incoming proposal for this listing:</b>
+        <div class="card-body">
+          <div class="row no-gutters">
+            <h2 class="card-title">
+              {{ai.listingID}}
+            </h2>
+            <br>
+  
+          <!-- Proposal Details -->
+          <div>
+              <div>Date: <b>{{ai.time}}</b></div>
+              <div>artist: <b>{{ai.artistType}}</b></div>
+              <div>genre: <b>{{ai.genre}}</b></div>
+              <div>Suggested Pay: € <b>{{ai.suggestedPay}}</b>/hr</div>
+              <div>Attached Message: <b>{{ai.message}}</b></div>
+              <button (click)="openDialog2(ai.suggestedPay, ai.transactionID, ai.listingID ,ai.artistID, ai.venueID, ai.suggestedPay)">Accept offer</button>
+              <button (click)="openDialog3(ai.suggestedPay, ai.listingID,ai.artistID,ai.venueID)">Reject offer</button>
+          <div id = {{ai.transactionID}} style="display:none">
+              <input
+                        type="number"
+                        min=1
+                        id="pay{{ai.transactionID}}"
+                        value={{ai.suggestedPay}}
+                        formControlName="suggestedPay">
+              <textarea 
+                        id="message{{ai.transactionID}}"
+                        class="form-control"
+                        formControlName="message" 
+                        placeholder="add motivation (optional)"
+                        maxlength="300"
+                        rows="5"></textarea>
+                      </div>
+              <button (click)="makeProposal(ai.transactionID, ai.listingID,ai.artistID,ai.venueID)">Make another proposal</button>
+          </div>
+          </div>
+        </div>
+      </div>
+      <!--Outgoing venue-->
+      <b *ngIf="Outgoing">You have outgoing proposal(s) for this listing:</b>
+      <div class="card" *ngFor="let ai of filteredVenueOutgoing()">
+        <div class="card-body">
+          <div class="row no-gutters">
+            <h2 class="card-title">
+              {{ai.listingID}}
+            </h2>
+            <br>
+  
+          <!-- Proposal Details -->
+          <div>
+              <div>Date: <b>{{ai.time}}</b></div>
+              <div>artist: <b>{{ai.artistType}}</b></div>
+              <div>genre: <b>{{ai.genre}}</b></div>
+              <div>Suggested Pay: € <b>{{ai.suggestedPay}}</b>/hr</div>
+              <div>Attached Message: <b>{{ai.message}}</b></div>
+          <div id={{ai.transactionID}} style="display:none">
+              <input
+                  type="number"
+                  min=1
+                  id="pay{{ai.transactionID}}"
+                  value={{ai.suggestedPay}}
+                  formControlName="suggestedPay">
+                  <textarea 
+                  id="message{{ai.transactionID}}"
+                  placeholder="(optional) add motivation"
+                  class="form-control"
+                  value={{ai.message}}
+                  formControlName="message" 
+                  maxlength="300"
+                  rows="5"></textarea>
+                </div>
+              <button (click)="activateEdit(ai.transactionID, ai.artistID, ai.venueID)">Edit offer</button>
+              <button (click)="openDialog4(ai.suggestedPay, ai.listingID,ai.artistID,ai.venueID)">Cancel offer</button>
+            </div>
+          </div>
+          </div>
+        </div>
+        <!--Outgoing artist-->
+      <div class="card" *ngFor="let ai of transactionsOutgoing">
+        <b>You have an outgoing proposal for this listing:</b>
+        <div class="card-body">
+          <div class="row no-gutters">
+            <h2 class="card-title">
+              {{ai.listingID}}
+            </h2>
+            <br>
+  
+          <!-- Proposal Details -->
+          <div>
+              <div>Date: <b>{{ai.time}}</b></div>
+              <div>artist: <b>{{ai.artistType}}</b></div>
+              <div>genre: <b>{{ai.genre}}</b></div>
+              <div>Suggested Pay: € <b>{{ai.suggestedPay}}</b>/hr</div>
+              <div>Attached Message: <b>{{ai.message}}</b></div>
+          <div id={{ai.transactionID}} style="display:none">
+              <input
+                  type="number"
+                  min=1
+                  id="pay{{ai.transactionID}}"
+                  value={{ai.suggestedPay}}
+                  formControlName="suggestedPay">
+                  <textarea 
+                  id="message{{ai.transactionID}}"
+                  placeholder="(optional) add motivation"
+                  class="form-control"
+                  value={{ai.message}}
+                  formControlName="message" 
+                  maxlength="300"
+                  rows="5"></textarea>
+                </div>
+              <button (click)="activateEdit(ai.transactionID, ai.artistID, ai.venueID)">Edit offer</button>
+              <button (click)="openDialog4(ai.suggestedPay, ai.listingID,ai.artistID,ai.venueID)">Cancel offer</button>
+            </div>
+          </div>
+          </div>
+        </div>
+
+
+        <!-- Make Transaction (only when user is logged in, isn't the owner of the listing and the listing is still available)-->
+        <div class="card"
+          id="formProposal"
+          style="display:none">
+          <div class="card-body">
+            
+            <form [formGroup]="form" (ngSubmit)="createTransaction()">
+
+              <!-- Number of Assets Input -->
+
+              <div class="form-group">
+                <label for="inputsuggestedPrice">
+                  <b>Suggested Pay/hr</b><i style="color: red;">*</i>
+                </label>
+                <div class="input-group mb-3">
+                  <div class="input-group-prepend">
+                    <span class="input-group-text">
+                      €
+                    </span>
+                  </div>
+                  <input
+                  type="number"
+                  min=1
+                  class="form-control"
+                  id="inputSuggestedPay"
+                  placeholder="What pay would you like to propose?"
+                  formControlName="suggestedPay">
+                    <span class="input-group-text">
+                      /hr
+                    </span>
+                    <br>
+                  </div>
+                  <div>Perform as:</div>
+                  <select name="aType" id="aType" formControlName="artistType">
+                    <option *ngFor="let t of ArtistTypes" 
+                    [value]="t">{{t}}
+                    </option>
+                  </select>
+
+                  <div>Which genre?:</div>
+                  <select name="gType" id="gType" formControlName="genre">
+                    <option *ngFor="let g of genres"
+                    [value]="g">{{g}}
+                    </option>
+                  </select>
+                  <br>
+                  <b>Would you like to attach a message?</b>
+                  <br>
+                  <input type="radio" id="yesMessage" name="addMessage"  value="yesMessage" (change)="showMessageForm()">
+                  <label for="yesMessage">Yes</label>
+                  <input type="radio" id="noMessage" name="addMessage"  value="noMessage" (change)="showMessageForm()" checked>
+                  <label for="noMessage">No</label>
+                </div>
+                <div class="form-group">
+                <textarea 
+                  id="textareaMessage"
+                  class="form-control"
+                  formControlName="message" 
+                  placeholder="Add Motivation"
+                  id="message"
+                  maxlength="300"
+                  rows="5"
+                  style="display:none"></textarea>
+              </div>
+
+              <!-- Make transaction -->
+              <button
+                value=""
+                type="submit"
+                class="btn btn-primary btn-block"
+                [disabled]="!form.getRawValue().suggestedPay || !form.getRawValue().genre || !form.getRawValue().artistType">
+                Make proposal
+              </button>
+              <!-- Display errors-->
+            <small *ngIf="error" class="form-text">
+              <i style="color: red;">{{error}}</i>
+            </small>
+          </form>
+          </div>
+        </div>
+        <div *ngIf="(awaiting && venueAccount)">
+          <h2>Awaiting Payment from you</h2>
+         </div>
+          <div *ngIf="venueAccount">
+           <div class="row" *ngFor="let t of filteredVenueAwaiting()">
+            <!-- Listing info -->
+            <div class="col">
+               <div class="card-body">
+                 <div class="row no-gutters">
+           
+                   <!-- Title -->
+                   <h2 class="card-title">
+                       {{t.listingID}}
+                     </h2>
+                     <br>
+           
+                   <!-- Listing Details -->
+                   <div>
+                       <div *ngIf="t.time">Date: <b>{{t.time}}</b></div>
+                       <div>artist: <b>{{t.artistType}}</b></div>
+                       <div>genre: <b>{{t.genre}}</b></div>
+                       <div *ngIf="t.suggestedPay">Suggested Pay: € <b>{{t.suggestedPay}}</b>/hr</div>
+                       <div *ngIf="t.message">Attached message: <b>{{t.message}}</b></div>
+                       </div>
+                     </div>
+                     <button (click)="pay(t.listingID, t.artistID, t.venueID)">Pay</button>
+                    </div>
+                   </div>
+               </div>
+            </div>
+  
+        <div *ngIf="(awaiting && artistAccount)">
+          <h2>Awaiting Payment from venue</h2>
+           <hr>
+         </div>
+          <div *ngIf="artistAccount">
+           <div class="row" *ngFor="let t of filteredAwaiting">
+            <!-- Listing info -->
+            <div class="col">
+               <div class="card-body">
+                 <div class="row no-gutters">
+           
+                   <!-- Title -->
+                   <h2 class="card-title">
+                       {{t.listingID}}
+                     </h2>
+                     <br>
+           
+                   <!-- Listing Details -->
+                   <div>
+                       <div *ngIf="t.time">Date: <b>{{t.time}}</b></div>
+                       <div>artist: <b>{{t.artistType}}</b></div>
+                       <div>genre: <b>{{t.genre}}</b></div>
+                       <div *ngIf="t.suggestedPay">Suggested Pay: € <b>{{t.suggestedPay}}</b>/hr</div>
+                       <div *ngIf="t.message">Attached message: <b>{{t.message}}</b></div>
+                       </div>
+                       <button [routerLink]="['/listings', 'details', t.listingID]">View Listing</button>
+                       <button routerLink="/history" [queryParams]="{l: t.listingID,a: t.artistID,v: t.venueID}">View Negotation history</button>
+                     </div>
+                    </div>
+                   </div>
+               </div>
+            </div>
+      </div>
+    </div>
+
+    <!-- Radio buttons for listing detail tabs -->
+    <div class="btn-group" role="group" style="margin-left: 15px;margin-top: 20px;">
+
+      <!-- Info -->
+      <button
+        [class]="'detail-tab-radio-button--info' + (selectedTab === 'info' ? '-selected' : '')"
+        (click)="selectedTab = 'info'">
+          Info
+      </button>
+
+      <!-- Reviews -->
+      <button
+        [class]="'detail-tab-radio-button--success' + (selectedTab === 'reviews' ? '-selected' : '')"
+        (click)="selectedTab = 'reviews'">
+          Reviews
+
+          <!-- star rating system -->
+          <ngb-rating max=5 [(rate)]="avgScore" readonly="true" *ngIf="avgScore !== 0">
+            <ng-template let-fill="fill" let-index="index">
+              <span [class]="'rating-star-back' + (fill === 100 ? '-filled' : '')">
+                <span class="rating-star-front" [style]="'width:' + fill + '%'">
+                  &#9733;
+                </span>
+                &#9733;
+              </span>
+            </ng-template>
+          </ngb-rating>
+          ({{reviews.length}})
+      </button>
+
+      <!-- Transactions (only when user is owner of listing) -->
+      <button
+        *ngIf="listing.userID === user.getId()"
+        [class]="'detail-tab-radio-button--warning' + (selectedTab === 'transactions' ? '-selected' : '')"
+        (click)="selectedTab = 'transactions'">
+          Transactions
+      </button>
+    </div>
+
+    <!-- Detail window -->
+    <div [class]="'detail-window--' + selectedTab" id="details">
+      <!-- Info Tab -->
+      <div *ngIf="selectedTab === 'info'" id='info'>
+
+        <!-- Description -->
+        <b *ngIf="listing.description">Description:</b>
+        <p *ngIf="listing.description">
+          {{listing.description}}
+        </p>
+
+        <p> 
+          Status: {{listing.status}}
+        </p>
+        <!-- Date -->
+        <p *ngIf="listing.date">
+          <b>Date: </b>{{listing.date}}
+        </p>
+
+        <!-- Timestamp -->
+        <p *ngIf="listing.endTime && listing.startTime">
+          <b>When?:</b> {{listing.startTime}} to {{listing.endTime}} 
+        </p>
+
+
+        <!-- Location -->
+        <p *ngIf="listing.location">
+          <b>Location: </b>{{listing.location}}
+        </p>
+
+        <!-- Venue -->
+        <p>
+          <b>Listing Creator: </b>{{maker.displayName}}
+        </p>
+
+        <!-- Genre -->
+        <p>
+          <b>Genre(s)</b> {{listing.genre}}
+        </p>
+
+        <!-- artistType -->
+        <p>
+          <b>Required talent </b>{{listing.artistType}}
+        </p>
+
+      </div>
+
+      <!-- Reviews Tab -->
+      <div *ngIf="selectedTab === 'reviews'" id='reviews'>
+
+        <!-- Reviews -->
+        <div *ngIf="reviews.length > 0">
+
+          <!-- Each Review -->
+          <div *ngFor="let review of reviews">
+
+            <!-- User Image-->
+            <img
+              style="border-radius: 50%; height: 30px; width: 30px"
+              [src]="review.transaction.user.profilePicture ? review.transaction.user.profilePicture: image.getUserPlaceholderImage()">
+
+            <!-- User Name -->
+            {{review.transaction.user.userName}}
+
+            <!-- Rating -->
+            <ngb-rating max=5 [(rate)]="review.score" readonly="true">
+              <ng-template let-fill="fill" let-index="index">
+                <span [class]="'rating-star-back' + (fill === 100 ? '-filled' : '')">
+                  &#9733;
+                </span>
+              </ng-template>
+            </ngb-rating>
+
+            <!-- Review Comment -->
+            <p *ngIf="review.comment" style="margin-left: 10px;">
+              {{review.comment}}
+            </p>
+
+            <hr>
+
+          </div>
+
+        </div>
+
+        <!-- No Reviews -->
+        <div *ngIf="reviews.length === 0">
+          No one has reviewed this listing yet
+        </div>
+
+      </div>
+
+      <!-- Transactions Tab-->
+      <div *ngIf="selectedTab === 'transactions'" id='transactions'>
+
+        <!-- Transactions-->
+        <div *ngIf="transactions.length > 0">
+          <table class="table">
+            <thead class="thead-light">
+              <!-- Table headers -->
+              <tr>
+                <th scope="col">Time</th>
+                <th scope="col">Customer</th>
+                <th scope="col"># Assets</th>
+                <th scope="col">Price</th>
+                <th scope="col">Status</th>
+                <th scope="col">Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let b of transactions">
+
+                <!-- Time -->
+                <td>{{b.time.split('T').join(' ').split(':').slice(0, -1).join(':')}}</td>
+
+                <!-- Customer -->
+                <th scope="row">
+                  {{b.user.name}}
+
+                  <!-- When user has score (NOT YET IMPLEMENTED)-->
+                  <ngb-rating max=5 [(rate)]="b.userScore" readonly="true" *ngIf="b.userScore !== 0">
+                    <ng-template let-fill="fill" let-index="index">
+                      <span [class]="'rating-star-back' + (fill === 100 ? '-filled' : '')">
+                        <span class="rating-star-front" [style]="'width:' + fill + '%'">
+                          &#9733;
+                        </span>
+                        &#9733;
+                      </span>
+                    </ng-template>
+                  </ngb-rating>
+                  <span *ngIf="b.userScore && b.userScore !== 0">({{b.userReviews.length}})</span>
+
+                </th>
+
+                <!-- # Assets -->
+                <td>{{b.numberOfAssets}}</td>
+
+                <!-- Price -->
+                <td>€{{b.numberOfAssets * b.pricePerAsset}}</td>
+
+                <!-- Status -->
+                <td>{{b.status}}</td>
+
+                <!-- Actions -->
+                <td>
+                  <div class="btn-group" role="group" *ngIf="b.status !== 'cancelled'">
+
+                    <!-- Confirm Payment-->
+                    <button
+                      *ngIf="b.status !== 'payed'"
+                      class="btn btn-lg btn-success"
+                      (click)="confirmPayment(b.transactionID)">
+                        Confirm Payment
+                    </button>
+
+                    <!-- Cancel Transaction-->
+                    <button
+                      class="btn btn-lg btn-danger"
+                      (click)="cancelTransaction(b.transactionID)">
+                        Cancel
+                    </button>
+
+                  </div>
+                </td>
+
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- No Transactions -->
+        <div *ngIf="transactions.length === 0">
+          No one has make a transaction yet
+        </div>
+      </div>
+    </div>
+  </div>
+
+

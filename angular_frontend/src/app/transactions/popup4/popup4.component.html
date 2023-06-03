@@ -1,0 +1,18 @@
+<h2 mat-dialog-title><b>Are you sure you want to cancel the offer and stop the negotiation?</b></h2>
+<mat-dialog-content class="mat-typography">
+  <p>If you choose to cancel, the negotiation will be ended. You should only cancel whenever you no longer want to
+    negotiate with the correspondent. The proposal history will be completely deleted and the offer will dissapear
+    from both the proposal tab, as on the listing. 
+  </p>
+<p>If you disagree with the offer, but want to keep negotiating: use the edit button to change your proposal. Cancelling is 
+    final, ends the negotiation and cannot be reversed.
+</p>
+<h3><b>You proposed:</b></h3>
+  <h1 style="margin-top:0px">€{{cancelledprice}}/hr</h1>
+</mat-dialog-content>
+<mat-dialog-actions>
+  <div style="display:flex; width:100%; justify-content:left">
+  <button mat-button mat-dialog-close class="submit" style="width:200px; margin-right:10px">Return</button>
+  <button mat-button [mat-dialog-close]="true" class="submit" style="width:200px">Stop the negotiation</button>
+</div>
+</mat-dialog-actions>

@@ -1,0 +1,377 @@
+.listings-container {
+  padding: 80px;
+  padding-top:10px;
+  padding-bottom:10px;
+  width: 100%;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.listing {
+  background-color: #EDF6F9;
+  border-radius: 8px;
+  padding: 20px;
+  width: 24%;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2),0 2px 4px rgba(0, 0, 0, 0.2);
+  margin-bottom: 10px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+
+.listing-image{
+  height:160px;
+  width:100%;
+  border-radius:8px;
+  border: 3px solid #83c5be85;
+  margin-bottom:10px;
+  object-fit: cover;
+}
+
+.listing-title{
+  font-weight: bold;
+  font-size:1.25rem;
+  color: #006D77;
+}
+.listing-date{
+  font-weight: 550;
+  font-size:1.05rem;
+  color: #565360;
+}
+
+.listing-details{
+  font-size:0.9rem;
+  color: #565360;
+}
+
+.listing-footer{
+  border-top: 1px solid #ddd;
+  background-color: #EDF6F9;
+  margin-top:10px;
+  padding-top:10px;
+  display:flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.listing-pay{
+  font-size: 1.05rem;
+  font-weight:550;
+}
+
+.listing-profile{
+  font-size:0.9rem;
+}
+
+.listing-header{
+  display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+}
+
+.listing:hover{
+  cursor: pointer;
+  transform: scale(1.03);
+}
+
+.listing-profile:hover{
+  text-decoration: underline;
+}
+
+.top-bar{
+  margin-left:80px;
+  margin-right:80px;
+  margin-top:10px;
+  border-radius: 8px;
+  padding:20px;
+  display:flex;
+  justify-content: space-between;
+  align-items: center;
+  background: #006D77;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2),0 8px 16px rgba(0, 0, 0, 0.2);
+}
+
+.searchbar{
+  width:74%;
+  height:50px;
+  background:#83C5BE;
+  border-radius:8px;
+  display: flex;
+  justify-content: left;
+  align-items: center;
+  margin-right:10px;
+}
+
+.search-input{
+  margin-left: -20px;
+  background:none;
+}
+
+.search-input:focus{
+  border: none;
+  outline: none;
+  background:none;
+}
+
+.order-button{
+  display:flex;
+  justify-content: center;
+  align-items: center;
+  width:300px;
+  height:50px;
+  border-radius:8px;
+  background: #83C5BE;
+  padding:6px;
+  margin-left:10px;
+}
+
+.filter-buttons-container{
+  padding-left:20px;
+}
+.filter-button{
+  display:flex;
+  justify-content: center;
+  align-items: center;
+  width:50px;
+  height:50px;
+  border-radius:8px;
+  background: #83C5BE;
+  padding:6px;
+}
+
+.filter-button:hover{
+  cursor: pointer;
+  background: #a1eee6;
+}
+.review-sel:hover{
+  background: #a1eee6;
+  color: #565360;
+}
+
+.total-button:hover{
+  background: #a1eee6;
+  color: #565360;
+}
+.searchbar:hover{
+  background: #a1eee6;
+}
+
+.order-button:hover{
+  cursor: pointer;
+  background: #a1eee6;
+}
+.amnt-found{
+  color:#565360;
+  margin-left:80px;
+  margin-top:4px;
+}
+
+.image-container {
+  position: relative;
+}
+.l-cal:hover{
+  background:#a1eee6;
+  border-radius: 8px;
+}
+.time-input:hover > * {
+  background:#a1eee6;
+  cursor: pointer;
+}
+.text-overlay {
+  position: absolute;
+  top: 3px;
+  right: 3px;
+  padding: 4px;
+  background-color: rgba(0, 0, 0, 0.5);
+  color: white;
+  display: flex;
+  border-top-right-radius: 8px;
+}
+
+.text-overlay p {
+  margin: 0;
+}
+
+.filter-pane{
+  margin-left:80px;
+  margin-right:80px;
+  border-top: 2px solid #565360;
+  border-radius: 8px;
+  padding:20px;
+  background: #006D77;
+  display:flex;
+  justify-content: center;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2),0 8px 16px rgba(0, 0, 0, 0.2);
+}
+
+.calendar-container{
+  background: #83C5BE;
+  border-radius: 8px;
+}
+
+::ng-deep .mat-calendar-body-selected {
+  background-color: #006D77;
+  color: white;
+}
+
+::ng-deep .mat-calendar-body-today:not(.mat-calendar-body-selected):not(.mat-calendar-body-comparison-identical) {
+  border-color: #006D77;
+}
+
+::ng-deep .mat-calendar-table-header-divider:after {
+  background: #006D77;
+  height:2px;
+}
+
+.time-filter{
+  display:flex;
+  justify-content: space-between;
+}
+
+.filter-text{
+  color:#83C5BE;
+}
+
+.time-input:focus{
+  border: none;
+  outline: none;
+}
+
+.bottom-container{
+  display:flex;
+  width: 100%;
+  justify-content: space-between;
+}
+
+.total-button{
+  background: #83C5BE;
+  color:#565360;
+  border: 1px solid #565360;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2),0 8px 16px rgba(0, 0, 0, 0.2);
+}
+
+
+.total-button:first-child {
+  border-top-left-radius: 4px;
+  border-bottom-left-radius: 4px;
+}
+
+.total-button:last-child {
+  border-top-right-radius: 4px;
+  border-bottom-right-radius: 4px;
+}
+
+.right-bottom{
+  color:#565360;
+}
+.button {
+  background-color: #099;
+  color: #EDF6F9;
+  text-decoration: none;
+  border-radius: 4px;
+  height: 36px;
+  display: inline-flex;
+  align-items: center;
+  overflow:hidden;
+  width: auto;
+  max-width: 36px; /** I'm animating max-width because width needs to be auto, and auto can't be animated **/
+  -webkit-transition: max-width 1s;
+  transition: max-width 1s;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2),0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.button:hover {
+  max-width: 300px;
+}
+
+.icon {
+  font-family: "Font Awesome 5 Free";
+  font-size: 16px;
+  padding: 0px 8px;
+  display: flex;
+  align-items: center;
+}
+
+.text {
+  white-space: nowrap;
+  padding-right: 15px;
+  color: #EDF6F9;
+}
+
+.lisbut{
+  position: fixed;
+      bottom: 10%;
+      right: 10%;
+      scale: 1.5;
+}
+
+.lisbut:hover{
+  cursor: pointer;
+}
+app-loading-spinner{
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+.review-sel{
+  background: #83c5bf4f;
+  color: #EDF6F9;
+  border-radius: 50%;
+  border:none;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2),0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.clicked{
+  background: #006D77;
+}
+
+.review-sel:first-child {
+  margin-left:0px;
+}
+.review-sel{
+  margin-left:4px;
+}
+.rewiew-sel:last-child {
+  margin-right:0px;
+}
+
+.filled{
+  fill:#006D77;
+}
+
+.selected{
+  background: #83C5BE;
+  color:#565360;
+}
+
+.sel-bot{
+  background: #006D77;
+  color:#EDF6F9;
+}
+
+.m-sel-g{
+  padding: 8px;
+  padding-right: 0px;
+  border-radius: 4px;
+  background-color: #83C5BE;
+}
+
+.m-sel-g:hover{
+  background-color: #a1eee6;
+}
+
+.req-pay{
+  background: #83C5BE;
+}
+
+.req-pay:hover{
+  background-color: #a1eee6;
+}
+
+.time-input-container:hover .time-input {
+  background-color: #a1eee6;
+  cursor: pointer;
+}

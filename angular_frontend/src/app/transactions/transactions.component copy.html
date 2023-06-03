@@ -1,0 +1,316 @@
+<app-loading-spinner *ngIf="isLoading" style="text-align:center"></app-loading-spinner>
+
+<div *ngIf="isLoading==false">
+<h3 *ngIf="incomingPropAmount==1">You have a new incoming proposal (marked in bold)</h3>
+<h3 *ngIf="incomingPropAmount>1">You have {{incomingPropAmount}} new incoming proposals (marked in bold)</h3>
+
+<h3 *ngIf="offerAcceptedAmount==1">A proposal was accepted and is now awaiting payement (marked in bold)</h3>
+<h3 *ngIf="offerAcceptedAmount>1">{{offerAcceptedAmount}} proposals were accepted and are now awaiting payement (marked in bold)</h3>
+
+<h3 *ngIf="rejectedCancelledAmount==1">You have one cancelled negotiation
+  <button (click)="clickCancelled()" *ngIf="clickedCancelled==false">Click to view</button>
+  <button (click)="clickCancelled()" *ngIf="clickedCancelled==true">Click to close</button>
+</h3>
+<h3 *ngIf="rejectedCancelledAmount>1">You have {{rejectedCancelledAmount}} cancelled negotiations
+  <button (click)="clickCancelled()" *ngIf="clickedCancelled==false">Click to view</button>
+  <button (click)="clickCancelled()" *ngIf="clickedCancelled==true">Click to close</button>
+</h3>
+
+<div *ngIf="clickedCancelled">
+  <div *ngFor="let rc of rejectedCancelled">
+    <h3>{{rc.accountID}} has stopped the negotiation on {{rc.listingID}}</h3>
+  </div>  
+</div>
+
+<h3 *ngIf="deletedListingAmount==1">One listing which had an ongoing negotiation has been deleted/expired
+  <button (click)="clickCancelled()" *ngIf="clickedDeleted==false">Click to view</button>
+  <button (click)="clickCancelled()" *ngIf="clickedDeleted==true">Click to close</button>
+</h3>
+<h3 *ngIf="deletedListingAmount>1">{{deletedListingAmount}} cancelled negotiations
+  <button (click)="clickCancelled()" *ngIf="clickedDeleted==false">Click to view</button>
+  <button (click)="clickCancelled()" *ngIf="clickedDeleted==true">Click to close</button>
+  </h3>
+  <div *ngIf="clickedDeleted">
+    <div *ngFor="let rc of deletedListing">
+      <h3>The listing of {{rc.accountID}} has been deleted/expired</h3>
+    </div>  
+  </div>
+</div>
+
+
+<div *ngIf="isLoading==false">
+<h2> Incoming Proposals</h2>
+<hr>
+<div *ngIf="artistAccount">
+<div class="row" *ngFor="let t of filteredArtistIncoming()">
+ <!-- Proposal info -->
+ <div class="col">
+    <div class="card-body">
+      <div class="row no-gutters">
+
+        <!-- Title -->
+        <h2 class="card-title">
+            {{t.listingID}}
+            <h1 *ngIf="incomingPropBold.includes(t.transactionID)">bold</h1>
+          </h2>
+          <br>
+
+        <!-- Proposal Details -->
+        <div>
+            <div *ngIf="t.time">Date: <b>{{t.time}}</b></div>
+            <div *ngIf="t.artistType">artist: <b>{{t.artistType}}</b></div>
+            <div *ngIf="t.genre">genre: <b>{{t.genre}}</b></div>
+            <div *ngIf="t.suggestedPay">Suggested Pay: € <b>{{t.suggestedPay}}</b>/hr</div>
+            <div *ngIf="t.message">Attached Message: <b>{{t.message}}</b></div>
+          </div>
+          <button [routerLink]="['/listings', 'details', t.listingID]">View Listing</button>
+          <button routerLink="/history" [queryParams]="{l: t.listingID,a: t.artistID,v: t.venueID}">View Negotation history</button>
+        </div>
+        <button (click)="openDialog2(t.suggestedPay, t.transactionID,t.listingID, t.artistID, t.venueID, t.suggestedPay, t.genre, t.artistType)">Accept offer</button>
+        <button (click)="openDialog3(t.suggestedPay, t.listingID,t.artistID,t.venueID)">Reject offer</button>
+    <div id = {{t.transactionID}} style="display:none">
+        <input
+                  type="number"
+                  min=1
+                  id="pay{{t.transactionID}}"
+                  value={{t.suggestedPay}}>
+        <textarea 
+                  id="message{{t.transactionID}}"
+                  class="form-control"
+                  placeholder="add motivation (optional)"
+                  maxlength="300"
+                  rows="5"></textarea>
+                </div>
+        <button (click)="makeProposal(t.transactionID, t.listingID,t.artistID,t.venueID, t.genre,t.artistType)">Make another proposal</button>
+    </div>
+ </div>
+</div>
+</div>
+
+<div *ngIf="venueAccount">
+    <div class="row" *ngFor="let t of filteredVenueIncoming()">
+     <!-- Listing info -->
+     <div class="col">
+        <div class="card-body">
+          <div class="row no-gutters">
+    
+            <!-- Title -->
+            <h2 class="card-title">
+                {{t.listingID}}
+                <h1 *ngIf="incomingPropBold.includes(t.transactionID)">bold</h1>
+              </h2>
+              <br>
+    
+    
+            <!-- Listing Details -->
+            <div>
+                <div *ngIf="t.time">Date: <b>{{t.time}}</b></div>
+                <div *ngIf="t.artistType">artist: <b>{{t.artistType}}</b></div>
+                <div *ngIf="t.genre">genre: <b>{{t.genre}}</b></div>
+                <div *ngIf="t.suggestedPay">Suggested Pay: € <b>{{t.suggestedPay}}</b>/hr</div>
+                <div *ngIf="t.message">Attached Message:  <b>{{t.message}}</b></div>
+              </div>
+              <button [routerLink]="['/listings', 'details', t.listingID]">View Listing</button>
+              <button routerLink="/history" [queryParams]="{l: t.listingID,a: t.artistID,v: t.venueID}">View Negotation history</button>
+            </div>
+          <button (click)="openDialog(t.suggestedPay, t.transactionID, t.listingID,t.artistID, t.venueID, t.suggestedPay, t.genre,t.artistType)">Accept offer</button>
+          <button (click)="openDialog3(t.suggestedPay, t.listingID,t.artistID,t.venueID)">Reject offer</button>
+          <div id={{t.transactionID}} style="display:none">
+            <input
+                    type="number"
+                    min=1
+                    id="pay{{t.transactionID}}"
+                    placeholder={{t.suggestedPay}}>
+                    <textarea 
+                    id="message{{t.transactionID}}"
+                    class="form-control"
+                    placeholder="add motivation (optional)" 
+                    maxlength="300"
+                    rows="5"></textarea>
+                  </div>
+          <button (click)="makeProposal(t.transactionID,t.listingID,t.artistID,t.venueID,t.genre,t.artistType)">Make another proposal</button>
+        </div>
+     </div>
+    </div>
+</div>
+
+
+<h2>Outgoing Proposals</h2>
+<hr>
+<div *ngIf="artistAccount">
+    <div class="row" *ngFor="let t of filteredArtistOutgoing()">
+     <!-- Listing info -->
+     <div class="col">
+        <div class="card-body">
+          <div class="row no-gutters">
+    
+            <!-- Title -->
+            <h2 class="card-title">
+                {{t.listingID}}
+              </h2>
+              <br>
+    
+    
+            <!-- Listing Details -->
+            <div>
+                <div *ngIf="t.time">Date: <b>{{t.time}}</b></div>
+                <div *ngIf="t.artistType">artist: <b>{{t.artistType}}</b></div>
+                <div *ngIf="t.genre">genre: <b>{{t.genre}}</b></div>
+                <div *ngIf="t.suggestedPay">Suggested Pay: € <b>{{t.suggestedPay}}</b>/hr</div>
+                <div *ngIf="t.message">Attached Message:  <b>{{t.message}}</b></div>
+            </div>
+            <button [routerLink]="['/listings', 'details', t.listingID]">View Listing</button>
+            <button routerLink="/history" [queryParams]="{l: t.listingID,a: t.artistID,v: t.venueID}">View Negotation history</button>
+          </div>
+          <div id={{t.transactionID}} style="display:none">
+              <input
+                  type="number"
+                  min=1
+                  id="pay{{t.transactionID}}"
+                  value={{t.suggestedPay}}>
+                  <textarea 
+                  id="message{{t.transactionID}}"
+                  class="form-control"
+                  value={{t.message}}
+                  placeholder="(optional) add motivation" 
+                  maxlength="300"
+                  rows="5"></textarea>
+                </div>
+              <button (click)="activateEdit(t.transactionID, t.artistID, t.venueID)">Edit offer</button>
+              <button (click)="openDialog4(t.suggestedPay,t.listingID,t.artistID,t.venueID)">Cancel offer</button>    
+              </div>
+            </div>
+        </div>
+     </div>
+
+<div *ngIf="venueAccount">
+    <div class="row" *ngFor="let t of filteredVenueOutgoing()">
+     <!-- Listing info -->
+
+     
+     <div class="col">
+        <div class="card-body">
+          <div
+              class="card"
+              style="margin-bottom: 5px;">
+          <div class="row no-gutters">
+
+            <!-- Listing info -->
+            <div class="col">
+              <div class="card-body">
+                <div class="row no-gutters">
+
+                  <!-- Details -->
+                  <div class="col">
+
+                    <!-- Title -->
+                    <h2 class="card-title">{{t.title}}
+                    </h2>
+
+                    <!-- Listing Details -->
+                    <div *ngIf="t.time">Date: <b>{{t.time}}</b></div>
+                    <div *ngIf="t.artistType">artist: <b>{{t.artistType}}</b></div>
+                    <div *ngIf="t.genre">genre: <b>{{t.genre}}</b></div>
+                    <div *ngIf="t.suggestedPay">Suggested Pay: € <b>{{t.suggestedPay}}</b>/hr</div>
+                    <div *ngIf="t.message">Attached message: <b>{{t.message}}</b></div>
+                    </div>
+                    <button [routerLink]="['/listings', 'details', t.listingID]">View Listing</button>
+                    <button routerLink="/history" [queryParams]="{l: t.listingID,a: t.artistID,v: t.venueID}">View Negotation history</button>
+                    </div>
+                    <div id={{t.transactionID}} style="display:none">
+                      <input
+                          type="number"
+                          min=1
+                          id="pay{{t.transactionID}}"
+                          value={{t.suggestedPay}}>
+                          <textarea 
+                          id="message{{t.transactionID}}"
+                          class="form-control"
+                          placeholder="(optional) add motivation"
+                          value={{t.message}}
+                          maxlength="300"
+                          rows="5"></textarea>
+                        </div>
+                    <button (click)="activateEdit(t.transactionID, t.artistID, t.venueID)">Edit offer</button>
+                    <button (click)="openDialog4(t.suggestedPay, t.listingID,t.artistID,t.venueID)">Cancel offer</button>
+                   </div>
+                  </div>
+              </div>
+           </div>
+  </div>
+    </div>
+    </div>
+          
+          
+
+
+    <div *ngIf="(awaiting && venueAccount)">
+     <h2>Awaiting Payment from you</h2>
+    </div>
+     <div *ngIf="venueAccount">
+      <div class="row" *ngFor="let t of filteredAwaiting()">
+       <!-- Listing info -->
+       <div class="col">
+          <div class="card-body">
+            <div class="row no-gutters">
+      
+              <!-- Title -->
+              <h2 class="card-title">
+                  {{t.listingID}}
+                  <h1 *ngIf="offerAcceptedBold.includes(t.transactionID)">bold</h1>
+                </h2>
+                <br>
+      
+      
+              <!-- Listing Details -->
+              <div>
+                  <div *ngIf="t.time">Date: <b>{{t.time}}</b></div>
+                  <div *ngIf="t.artistType">artist: <b>{{t.artistType}}</b></div>
+                  <div *ngIf="t.genre">genre: <b>{{t.genre}}</b></div>
+                  <div *ngIf="t.suggestedPay">Suggested Pay: € <b>{{t.suggestedPay}}</b>/hr</div>
+                  <div *ngIf="t.message">Attached message: <b>{{t.message}}</b></div>
+                  </div>
+                  <button [routerLink]="['/listings', 'details', t.listingID]">View Listing</button>
+                </div>
+                <button (click)="pay(t.listingID, t.artistID, t.venueID)">Pay</button>
+               </div>
+              </div>
+          </div>
+       </div>
+
+
+       <div *ngIf="(awaiting && artistAccount)">
+        <h2>Awaiting Payment from venue</h2>
+         <hr>
+       </div>
+        <div *ngIf="artistAccount">
+         <div class="row" *ngFor="let t of filteredAwaiting()">
+          <!-- Listing info -->
+          <div class="col">
+             <div class="card-body">
+               <div class="row no-gutters">
+         
+                 <!-- Title -->
+                 <h2 class="card-title">
+                     {{t.listingID}}
+                     <h1 *ngIf="offerAcceptedBold.includes(t.transactionID)">bold</h1>
+                   </h2>
+                   <br>
+         
+                 <!-- Listing Details -->
+                 <div>
+                     <div *ngIf="t.time">Date: <b>{{t.time}}</b></div>
+                     <div *ngIf="t.artistType">artist: <b>{{t.artistType}}</b></div>
+                     <div *ngIf="t.genre">genre: <b>{{t.genre}}</b></div>
+                     <div *ngIf="t.suggestedPay">Suggested Pay: € <b>{{t.suggestedPay}}</b>/hr</div>
+                     <div *ngIf="t.message">Attached message: <b>{{t.message}}</b></div>
+                     </div>
+                     <button [routerLink]="['/listings', 'details', t.listingID]">View Listing</button>
+                   </div>
+                  </div>
+                 </div>
+             </div>
+          </div>
+        </div>
+        <router-outlet></router-outlet>
+        &nbsp;

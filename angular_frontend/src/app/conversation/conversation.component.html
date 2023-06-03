@@ -1,0 +1,7 @@
+<div *ngFor="let convo of conversations">
+     {{convo.content}}
+     <a routerLink="/messages"  [queryParams]="{conversationID:convo.conversationID}" class="nav-link">
+          {{convo.conversationID}}
+
+      </a>
+</div>

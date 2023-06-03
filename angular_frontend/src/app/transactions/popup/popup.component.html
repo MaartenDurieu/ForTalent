@@ -1,0 +1,18 @@
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+<h2 mat-dialog-title><b>Are you sure you want to accept the offer?</b></h2>
+<mat-dialog-content class="mat-typography">
+  <p>Accepting this offer ends the negotiation for this listing. The listing will no longer appear as available and
+    all other ongoing proposals with others will be deleted. You will also not be able to make any changes or look at the proposal history anymore.
+    Once accepted, the listing will be made invisible untill the negotiated amount is paid. When the payment is received from you,
+    the listing will be added to your profile and calendar publicly. The listing will also appear on the profile of the artists aswell. 
+  </p>
+
+  <h3><b>Accept this pay as the final offer?</b></h3>
+  <h1 style="margin-top:0px" >€{{finalprice}}/hr</h1>
+</mat-dialog-content>
+<mat-dialog-actions align="start">
+  <div style="display:flex; width:100%; justify-content:left">
+    <button mat-button mat-dialog-close  class="submit" style="width:200px; margin-right:10px">Return</button>
+    <button mat-button [mat-dialog-close]="true"  class="submit" style="width:200px">Accept the proposal</button>
+    </div>
+</mat-dialog-actions>

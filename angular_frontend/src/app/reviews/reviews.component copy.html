@@ -1,0 +1,41 @@
+<app-loading-spinner *ngIf="isLoading"></app-loading-spinner>
+
+<div *ngIf="isLoading==false">
+<h3 *ngIf="writeReviewAmount==1">You can write a review for a performed listing (marked in bold)</h3>
+<h3 *ngIf="writeReviewAmount>1">You can write {{writeReviewAmount}} reviews for performed listings (marked in bold)</h3>
+
+<h3 *ngIf="receivedReviewAmount==1">You have a new review (marked in bold)</h3>
+<h3 *ngIf="receivedReviewAmount>1">You have {{receivedReviewAmount}} new reviews (marked in bold)</h3>
+</div>
+
+<div *ngIf="isLoading==false">
+<h1 *ngIf="filteredReviewable()">You can write a review for the following complete listings</h1>
+<h1 *ngIf="!filteredReviewable()">There are no listings you can review at this time.
+</h1>
+<hr>
+<div *ngFor="let l of filteredReviewable()">
+    <div class="row">
+     <!-- Proposal info -->
+     <div class="col">
+        <div class="card-body">
+          <div class="row no-gutters">
+    
+            <!-- Title -->
+            <h2 class="card-title">
+                {{l.listingID}}:{{l.title}}
+                <h1 *ngIf="receivedReviewBold.includes(l.reviewID)">bold</h1>
+              </h2>
+            <!-- Proposal Details -->
+            <div>
+                <div *ngIf="l.date">Date: <b>{{l.date}}</b></div>
+                <div *ngIf="l.suggestedPrice">Suggested Pay: € <b>{{l.suggestedPrice}}</b>/hr</div>
+                <div *ngIf="l.location">Attached Message: <b>{{l.location}}</b></div>
+              </div>
+              <button [routerLink]="['/listings', 'details', l.listingID]">View Listing</button>
+              <button [routerLink]="['/reviews', 'write', l.listingID]">Write review</button>
+            </div>
+        </div>
+     </div>
+    </div>
+    </div>
+  </div>

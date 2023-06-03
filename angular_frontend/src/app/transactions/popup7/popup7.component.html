@@ -1,0 +1,40 @@
+<h2 mat-dialog-title><b>Counter Proposal</b></h2>
+<mat-dialog-content class="mat-typography">
+  <p>If you want to keep negotiating, but do no agree with the proposal, you can send a counter proposal.
+  </p>
+  <h3 style="margin-top:20px">Offered price</h3> 
+  <h2 style="color:#FAB81E;">€{{editprice}}/hr</h2>
+  <h3>Provided details</h3> 
+  <select name="gType" id="aType" style="width:80%;margin-bottom:20px;" [(ngModel)]="data.genre"> 
+    <option *ngFor="let t of this.Genres"
+    [value]="t" [selected]="t===genre">{{t}}
+    </option>
+  </select>
+ <br>
+ <select name="gType" id="gType"  style="width:80%;margin-bottom:30px;" [(ngModel)]="data.artistType">
+  <option *ngFor="let g of this.ArtistTypes"
+  [value]="g" [selected]="g===artistType">{{g}}
+  </option>
+</select>
+ <br>
+ <h3 style="margin-top:-20px">New proposal €/hr </h3> 
+  <input required="" type="number" id="price" value={{editprice}}>
+  <label class="user-label">Proposed price/hr</label>
+  <h3>Message (optional)</h3>
+<textarea 
+                  id="textareaMessage"
+                  placeholder="Add Motivation (Optional)"
+                  id="message"
+                  maxlength="300"
+                  value={{data.message}}
+                  [(ngModel)]="data.message"
+                  rows="5"
+                  ></textarea>
+</mat-dialog-content>
+
+<mat-dialog-actions align="start">
+  <div style="display:flex; width:100%; justify-content:left">
+    <button mat-button mat-dialog-close class="submit" style="width:200px; margin-right:10px" (click)="closeClick()">Return</button>
+    <button mat-button [mat-dialog-close]="true" class="submit" style="width:200px"(click)="accept()">Make the counterproposal</button>
+  </div>
+</mat-dialog-actions>

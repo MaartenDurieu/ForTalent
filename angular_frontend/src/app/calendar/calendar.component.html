@@ -1,0 +1,215 @@
+<div *ngFor="let n of notifications">
+  <div class="notification-info">
+  {{n.listing.title}} has been added to your calendar on {{n.listing.date |  date:'d MMMM y'}}
+  </div>
+</div>
+<app-loading-spinner *ngIf="isLoading"></app-loading-spinner>
+<div class="page-pos">
+<div class="cal-container" style="margin:40px; width:90%">
+<div class="row text-center" >
+    <div class="col-md-4">
+      <div class="btn-group">
+        <div
+          class="btn btn-primary"
+          mwlCalendarPreviousView
+          [view]="view"
+          [(viewDate)]="viewDate"
+          (viewDateChange)="closeOpenMonthViewDay()"
+        >
+          &lt;
+        </div>
+        <div
+          class="btn btn-primary"
+          mwlCalendarToday
+          [(viewDate)]="viewDate"
+        >
+          Today
+        </div>
+        <div
+          class="btn btn-primary"
+          mwlCalendarNextView
+          [view]="view"
+          [(viewDate)]="viewDate"
+          (viewDateChange)="closeOpenMonthViewDay()"
+        >
+          &gt;
+        </div>
+      </div>
+    </div>
+
+    
+    <div class="col-md-4">
+      <h3>{{ viewDate | calendarDate:(view + 'ViewTitle'):'en' }}</h3>
+    </div>
+    <div class="col-md-4">
+      <div class="btn-group">
+        <div
+          class="btn btn-primary"
+          (click)="setView(CalendarView.Month)"
+          [class.active]="view === CalendarView.Month"
+        >
+          Month
+        </div>
+        <div
+          class="btn btn-primary"
+          (click)="setView(CalendarView.Week)"
+          [class.active]="view === CalendarView.Week"
+        >
+          Week
+        </div>
+      </div>
+    </div>
+  </div>
+  <br/>
+
+  <div [ngSwitch]="view">
+    <mwl-calendar-month-view
+      *ngSwitchCase="CalendarView.Month"
+      [viewDate]="viewDate"
+      [events]="events"
+      [refresh]="refresh"
+      [weekStartsOn]="1"
+      [activeDayIsOpen]="activeDayIsOpen"
+      (dayClicked)="dayClicked($event.day)"
+      (eventClicked)="handleEvent('Clicked', $event.event)"
+      (eventTimesChanged)="eventTimesChanged($event)"
+    >
+    </mwl-calendar-month-view>
+
+    <mwl-calendar-week-view
+      *ngSwitchCase="CalendarView.Week"
+      [viewDate]="viewDate"
+      [hourSegments]="1"
+      [hourSegmentHeight]="80"
+      [weekStartsOn]="1"
+      [events]="events"
+      [refresh]="refresh"
+      (eventClicked)="handleEvent('Clicked', $event.event)"
+      (eventTimesChanged)="eventTimesChanged($event)"
+    >
+    </mwl-calendar-week-view>
+  </div>
+</div>
+</div>
+
+<ng-template #modalContent let-close="close">
+  <div *ngIf="modalData?.event.title=='Open Listing'" class="popper">
+  <div class="modal-header">
+    <h5 class="modal-title"> <a href="url" [routerLink]="['/listings', 'details', modalData?.event.listingID]">{{modalData?.event.hover}}</a></h5>
+    <button type="button" class="close" (click)="close()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <div class="popper-text">
+      By: <a href="url" [routerLink]="getProfileLink('venue')">{{modalData?.event.userDisplayName}}</a>
+    </div>
+    <div class="popper-text">
+      Looking for:  {{modalData?.event.artistType}}
+    </div>
+    <div class="popper-text">
+      Genre(s): {{modalData?.event.genre}}
+    </div>
+    <div class="popper-text">
+      Address: {{modalData?.event.location}}
+    </div>
+    <div class="popper-text">
+      Suggested pay: <b>€{{ modalData?.event.suggestedPrice}}/hr</b>
+    </div>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-outline-secondary" (click)="close()">
+      OK
+    </button>
+  </div>
+</div>
+
+<div *ngIf="modalData?.event.title=='In Progress'" class="popper">
+  <div class="modal-header">
+    <h5 class="modal-title">In Progress</h5>
+    <button type="button" class="close" (click)="close()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <div class="popper-text">
+      A transaction is ongoing on this listing. Meaning you are not able to interact with this listing.
+    </div>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-outline-secondary" (click)="close()">
+      OK
+    </button>
+  </div>
+</div>
+
+<div *ngIf="modalData?.event.title=='Filled listing'" class="popper">
+  <div class="modal-header">
+    <h5 class="modal-title">Filled Listing</h5>
+    <button type="button" class="close" (click)="close()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <div class="popper-text">
+      Performance by: <a href="url" [routerLink]="getProfileLink('artist')"> {{ modalData?.event.artistDisplayName}} </a>
+    </div>
+    <div class="popper-text">
+      From {{ modalData?.event.start.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}} to {{ modalData?.event.end.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}}
+    </div>
+    <div class="popper-text">
+      At {{ modalData?.event.location}}
+    </div>
+    <div class="popper-text">
+      As {{ modalData?.event.artistType}}
+    </div>
+    <div class="popper-text">
+      Genre(s): {{ modalData?.event.genre}}
+    </div>
+    <div class="popper-text">
+      For <b>€{{ modalData?.event.suggestedPrice}}/hr</b>
+    </div>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-outline-secondary" (click)="close()">
+      OK
+    </button>
+  </div>
+</div>
+
+<div *ngIf="modalData?.event.title=='Booked'" class="popper">
+  <div class="modal-header">
+    <h5 class="modal-title">Booked slot</h5>
+    <button type="button" class="close" (click)="close()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <div class="popper-text">
+      Booked by: <a href="url" [routerLink]="getProfileLink('venue')"> {{ modalData?.event.artistDisplayName}} </a>
+    </div>
+    <div class="popper-text">
+      From {{ modalData?.event.start.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}} to {{ modalData?.event.end.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}}
+    </div>
+    <div class="popper-text">
+      At {{ modalData?.event.location}}
+    </div>
+    <div class="popper-text">
+      As {{ modalData?.event.artistType}}
+    </div>
+    <div class="popper-text">
+      Genre(s) {{ modalData?.event.genre}}
+    </div>
+    <div class="popper-text">
+      For <b>€{{ modalData?.event.suggestedPrice}}/hr</b>
+    </div>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-outline-secondary" (click)="close()">
+      OK
+    </button>
+  </div>
+</div>
+</ng-template>
+
+  

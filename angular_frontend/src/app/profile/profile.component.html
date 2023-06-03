@@ -1,0 +1,230 @@
+<div style="margin: 10px;">
+  <div class="container">
+    <div class="row">
+      <div class="offset-md-2 col-md-8 offset-lg-3 col-lg-6">
+
+        <!-- Title + change password button-->
+        <div class="row">
+          <!-- Title -->
+          <div class="col">
+            <h1>Edit User Data</h1>
+          </div>
+
+          <!-- Link to change password page -->
+          <div class="col">
+            <button class="btn btn-block btn-info" routerLink="/profile/changePassword">
+              CHANGE PASSWORD
+            </button>
+          </div>
+        </div>
+
+        <!-- Form -->
+        <div class="card">
+          <div class="card-body">
+            <form [formGroup]="form" (ngSubmit)="updateProfile()">
+
+              <!-- First Name -->
+              <div class="form-group" id = FN>
+                <label for="inputFirstName">
+                  First Name
+                </label>
+                <input
+                  type="text"
+                  class="form-control"
+                  id="inputFirstName"
+                  placeholder="Enter First Name"
+                  formControlName="firstName">
+              </div>
+
+              <!-- Last Name -->
+              <div class="form-group" id = LN>
+                <label for="inputLastName">
+                  Last Name
+                </label>
+                <input
+                  type="text"
+                  class="form-control"
+                  id="inputLastName"
+                  placeholder="Enter Last Name"
+                  formControlName="lastName">
+              </div>
+
+              <!-- Email -->
+              <div class="form-group">
+                <label for="inputEmail">
+                  Email Address 
+                </label>
+                <input
+                  type="email"
+                  class="form-control"
+                  id="inputEmail"
+                  placeholder="Enter email"
+                  formControlName="email">
+              </div>
+
+              <!-- Username -->
+              <div class="form-group">
+                <label for="inputUsername">
+                  Display Name 
+                </label>
+                <input
+                  type="text"
+                  class="form-control"
+                  id="inputProfilename"
+                  placeholder="Enter username"
+                  formControlName="displayName">
+              </div>
+
+              <!-- Address -->
+              <div class="form-group">
+                <label for="inputAddress">
+                  Address
+                </label>
+                <input
+                  type="text"
+                  class="form-control"
+                  id="inputAddress"
+                  placeholder="Enter Address"
+                  formControlName="address">
+              </div>
+
+              <!-- Phone Number -->
+              <div class="form-group">
+                <label for="inputPhoneNumber">
+                  Phone number
+                </label>
+                <input
+                  type="text"
+                  class="form-control"
+                  id="inputPhoneNumber"
+                  placeholder="Enter Phone Number"
+                  formControlName="phoneNumber">
+              </div>
+
+              <!-- Profile Image -->
+              <div class="form-group">
+
+                <!-- Image Input -->
+                <label for="inputImage">
+                  Profile picture
+                </label>
+                <div class="custom-file" id="inputImage">
+                  <input
+                    type="file"
+                    class="custom-file-input"
+                    id="customFile"
+                    (change)="fileSelected($event)">
+                  <label
+                    class="custom-file-label"
+                    for="customFile">
+                      {{fileName ? fileName : 'Choose Image'}}
+                  </label>
+                </div>
+
+                <!-- Display selected Image -->
+                <div *ngIf="imgSrc" style="display: flex;justify-content: center;">
+                  <img style="width: 200px;height: 200px;border-radius: 50%;" [src]="imgSrc">
+                </div>
+                <!-- Remove Image Button -->
+                <button *ngIf="imgSrc" type="button" class="btn btn-outline-danger btn-block" (click)="imgSrc = null">Remove picture</button>
+
+                <!-- Image Errors-->
+                <small *ngIf="imgError" class="form-text">
+                  <i style="color: red;">{{imgError}}</i>
+                </small>
+
+              </div>
+
+              <!-- Profile Banner -->
+              <div class="form-group">
+
+                <!-- Image Input -->
+                <label for="inputImage2">
+                  Cover photo
+                </label>
+                <div class="custom-file" id="inputImage2">
+                  <input
+                    type="file"
+                    class="custom-file-input"
+                    id="customFile2"
+                    (change)="fileSelectedBanner($event)">
+                  <label
+                    class="custom-file-label"
+                    for="customFile2">
+                      {{fileName ? fileName : 'Choose Image'}}
+                  </label>
+                </div>
+
+                <!-- Display selected Image -->
+                <div *ngIf="imgSrcBanner" style="display: flex;justify-content: center;">
+                  <img style="width: 1080px;height: 221px;" [src]="imgSrcBanner">
+                </div>
+                
+                <!-- Remove Image Button -->
+                <button *ngIf="imgSrcBanner" type="button" class="btn btn-outline-danger btn-block" (click)="imgSrcBanner = null">Remove picture</button>
+
+                <!-- Image Errors-->
+                <small *ngIf="imgError" class="form-text">
+                  <i style="color: red;">{{imgErrorBanner}}</i>
+                </small>
+
+              </div>
+
+              <!-- Profile Description -->
+              <div class="form-group">
+                <label for="description">
+                  Description
+                </label>
+                <textarea
+                  class="form-control"
+                  id="description"
+                  placeholder="Describe yourself on your profile"
+                  rows="14"
+                  formControlName="description">
+                </textarea>
+              </div>
+            
+
+              <!-- Submit Button -->
+              <button
+                type="submit"
+                class="btn btn-primary btn-block"
+                [disabled]="!form.getRawValue().email">
+                  UPDATE PROFILE
+              </button>
+
+              <!-- Errors -->
+              <small *ngIf="error" class="form-text">
+                <i style="color: red;">{{error}}</i>
+              </small>
+
+            </form>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div>
+
+<!--<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+
+
+<div class="w3-row w3-center w3-dark-grey w3-padding-16">
+  <div class="w3-quarter w3-section">
+    <span class="w3-xlarge">14+</span><br>
+    Partners
+  </div>
+  <div class="w3-quarter w3-section">
+    <span class="w3-xlarge">55+</span><br>
+    Projects Done
+  </div>
+  <div class="w3-quarter w3-section">
+    <span class="w3-xlarge">89+</span><br>
+    Happy Clients
+  </div>
+  <div class="w3-quarter w3-section">
+    <span class="w3-xlarge">150+</span><br>
+    Meetings
+  </div>
+</div>-->

@@ -1,0 +1,117 @@
+<div class="wrapper">
+  <div class="signup-container">
+    <form
+    id="VenueForm"
+    [formGroup]="form">
+    <div class="upper-container">
+      <div class="signup-text">Register</div>
+      <div class="description-text">Please fill in the required information</div>
+    </div>
+    <div class="text-seperator">Login details</div>
+    <div class="input-fields">
+      <input placeholder="Mail" type="text" formControlName="email">
+      <input placeholder="Password" type="password" formControlName="password">
+      <input placeholder="Repeat password" type="password" formControlName="repeatPassword">
+      <small style="margin-top:-16px;"
+            *ngIf="
+              form.getRawValue().password && form.getRawValue().repeatPassword && form.getRawValue().password !== form.getRawValue().repeatPassword
+            "
+            class="form-text"
+          >
+            <i style="color: red">Passwords don't match</i>
+          </small>
+    </div>
+    <div class="text-seperator">Account type</div>
+    <div class="radio-inputs" >
+      <label class="radio-s">
+        <input type="radio" name="radio" (change)="accountTypeSelector()">
+        <span class="name">Artist</span>
+      </label>
+      <label class="radio-s">
+        <input type="radio" id="radiocheck" name="radio" (change)="accountTypeSelector()">
+        <span class="name">Organiser</span>
+      </label>
+    </div>
+    <div class="text-seperator">Contact information</div>
+    <div class="input-fields">
+      <input placeholder="Phone number" type="text" formControlName="phoneNumber">
+      <input placeholder="Address" type="text" formControlName="address" *ngIf="accountType=='Venue'">
+    </div>
+    <div class="text-seperator">Profile setup</div>
+    <div class="input-fields">
+
+
+      <!-- Select Image-->
+      <div class="img-div">
+        <label for="inputTag" class="img-label">
+          Select Profile Picture
+          <input id="inputTag" type="file" class="img-input" (change)="fileSelected($event)" accept="image/png, image/jpeg"/>
+          <br/>
+          <span id="imageName"></span>
+        </label>
+      </div>
+
+      <!-- Display selected Image -->
+      <div *ngIf="imgSrc" style="display: flex; justify-content: center">
+        <img
+          style="width: 200px; height: 200px; border-radius: 50%"
+          [src]="imgSrc"
+        />
+      </div>
+
+      <!-- Remove Image Button -->
+      <button
+        *ngIf="imgSrc"
+        type="button"
+        class="btn btn-outline-danger btn-block"
+        (click)="imgSrc = null"
+        style="margin-bottom:20px;"
+      >
+        Remove Picture
+      </button>
+
+      <!-- Image Error -->
+      <small *ngIf="imgErrorBanner" class="form-text">
+        <i style="color: red">{{ imgErrorBanner }}</i>
+      </small>
+
+
+      <input placeholder="Display name" type="text" formControlName="displayName">
+      <textarea
+            id="description"
+            placeholder="Write an unique description to show on your profile!"
+            rows="14"
+            formControlName="description"
+          >
+          </textarea>
+    </div>
+    <button
+          class="submit"
+          style="margin-bottom: 4px;"
+          (click)="signUp()"
+          [disabled]="!(
+          form.getRawValue().email && 
+          form.getRawValue().password && 
+          form.getRawValue().repeatPassword && 
+          (form.getRawValue().password === form.getRawValue().repeatPassword) && form.getRawValue().phoneNumber && 
+          form.getRawValue().displayName && 
+          imgSrc &&
+          form.getRawValue().description &&
+          accountType !=='' &&
+          (accountType === 'Venue' ? (form.getRawValue().address) : true)
+         )"
+        >Sign up</button>
+        <small *ngIf="error" class="form-text">
+          <i style="color: red">{{ error }}</i>
+        </small>
+    </form>
+    <div class="lower-container">
+      <div class="seperator">
+        <hr class="line" />
+        <span>Or</span>
+        <hr class="line" />
+      </div>
+      <div class="note" routerLink="/login">Return to login</div>
+    </div>
+  </div>
+</div>

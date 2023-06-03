@@ -1,0 +1,33 @@
+.top-bar {
+  height: 80px;
+  width: 100%;
+  background-color: blue;
+  z-index: 1; /* set a z-index value */
+  position: fixed; /* make sure the position is set */
+}
+.top-bar2 {
+  height: 80px;
+  width: 100%;
+  background-color: blue;
+  z-index: 1; /* set a z-index value */
+  position: relative; /* make sure the position is set */
+}
+
+
+.grid-container {
+  display: grid;
+  grid-template-columns: 200px 1fr; /* define the left-bar as the first column*/
+  grid-template-rows: 80px 1fr; /* include the top bar's height */
+  height: 100vh;
+  position: relative; /* set position to relative */
+}
+
+.left-bar {
+  background-color: black;
+  height: 100vw;
+}
+
+.right-bar {
+  height: 100%;
+  width: 100%;
+}

@@ -1,0 +1,210 @@
+ <!-- <a routerLink="/profile" class="nav-link" *ngIf="sameAccount">
+    Change my settings
+
+</a>
+
+<button *ngIf="venueAccount&&!sameAccount" (click)="followAccount()">Follow</button>
+<button (click)="sendMessage()">Send message</button> -->
+<app-loading-spinner *ngIf="isLoading"></app-loading-spinner>
+<div class="wrapper" *ngIf="!isLoading">
+<div class="top-banner" *ngIf="userAccount">
+<div class="top-info">
+    <div class="user-info">
+      <div class="user-pic">
+        <img [src]="userAccount.profilePicture" style="width:100%;height:100%;border-radius: 50%;">
+      </div>
+      <div class="user-name">
+        <div class="display-name">{{userAccount.displayName}}</div>
+        <div style="display:flex;">
+        <div class="artist-type">-{{userAccount.accountType}}-</div>
+        <div style="display:flex; align-items:center; margin-left: 8px;">
+          <div class="reviewscore" *ngIf="userAccount.reviewScore >= 0">{{userAccount.reviewScore | number:'1.0-1'}}</div>
+          <div class="reviewscore" *ngIf="!userAccount.reviewScore">(no reviews yet)</div>
+          <div *ngIf="userAccount.reviewScore >= 0">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="#FAB81E" xmlns="http://www.w3.org/2000/svg" style="margin-bottom:2px;">
+            <path d="M15.09 8.26L12 2L8.91 8.26L2 9.27L7 14.14L5.82 21.02L12 17.77L18.18 21.02L17 14.14L22 9.27L15.09 8.26Z" stroke="#83C5BE" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </div>   
+        </div>
+      </div>
+    </div>
+</div>
+<div class="action-container">
+    <button class="action-button" *ngIf="!sameAccount" style="margin-bottom:10px">Follow</button>
+    <button class="action-button" *ngIf="!sameAccount">Message</button>
+    <button class="action-button" *ngIf="sameAccount">Edit</button>
+</div>
+</div>
+<div class="selection-buttons">
+    <div class="selection-b" (click)="showTab('Info')"  [ngClass]="{ 'active': activeButton === 'info' }">Info</div>
+    <div class="selection-b" (click)="showTab('Calendar')"  [ngClass]="{ 'active': activeButton === 'calendar' }">Calendar</div>
+    <div class="selection-b" (click)="showTab('Reviews')"  [ngClass]="{ 'active': activeButton === 'reviews' }" *ngIf="!receivedReviewAmount">Reviews</div>
+    <div class="selection-b" (click)="showTab('Reviews')"  [ngClass]="{ 'active': activeButton === 'reviews' }" *ngIf="receivedReviewAmount>0">Reviews ({{receivedReviewAmount > 9 ? '9+': receivedReviewAmount}})</div>
+</div>
+</div>
+<div class="info-banner" *ngIf="infovis">
+  <div class="left-container">
+    <div class="container-s" *ngIf="avgPay>=0">
+      <div class="description-text">Average pay</div>
+      <div class="info-price">
+        €{{ avgPay | number:'.0-0' }}/hr</div>
+    </div>
+    <div class="container-s">
+      <div class="description-text">Contact info</div>
+      <div class="info-item">
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" style="margin-right: 4px">
+          <path d="M13.3335 2.66663H2.66683C1.9335 2.66663 1.3335 3.26663 1.3335 3.99996V12C1.3335 12.7333 1.9335 13.3333 2.66683 13.3333H13.3335C14.0668 13.3333 14.6668 12.7333 14.6668 12V3.99996C14.6668 3.26663 14.0668 2.66663 13.3335 2.66663Z" stroke="#83C5BE" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
+          <path d="M14.6668 4L8.00016 8.66667L1.3335 4" stroke="#83C5BE" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+          {{userAccount.email}}</div>
+      <div class="info-item">
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" style="margin-right: 4px">
+          <g clip-path="url(#clip0_46_3061)">
+          <path d="M14.6665 13.28V11.28C14.6746 10.953 14.5622 10.6345 14.3508 10.385C14.1394 10.1355 13.8436 9.97234 13.5198 9.92665C12.8797 9.84224 12.2513 9.68568 11.6465 9.45998C11.4078 9.37029 11.1485 9.35088 10.8992 9.40405C10.6499 9.45722 10.4211 9.58074 10.2398 9.75998L9.39313 10.6067C7.7241 9.65761 6.34216 8.27568 5.39313 6.60665L6.23979 5.75998C6.41903 5.57872 6.54256 5.34988 6.59573 5.10057C6.6489 4.85126 6.62949 4.59193 6.53979 4.35332C6.31409 3.74847 6.15754 3.12003 6.07313 2.47998C6.02784 2.15961 5.86761 1.86664 5.6223 1.65567C5.37699 1.4447 5.06333 1.33013 4.73979 1.33332H2.73979C2.55469 1.33349 2.37164 1.37221 2.20232 1.447C2.033 1.52179 1.8811 1.63102 1.7563 1.76773C1.63151 1.90444 1.53654 2.06564 1.47746 2.24107C1.41838 2.41649 1.39647 2.60229 1.41313 2.78665C1.63195 4.84731 2.33311 6.82745 3.45979 8.56665C4.48335 10.1774 5.84901 11.5431 7.45979 12.5667C9.19113 13.6894 11.1617 14.3904 13.2131 14.6133C13.398 14.63 13.5844 14.6079 13.7603 14.5485C13.9362 14.489 14.0977 14.3934 14.2345 14.2679C14.3713 14.1424 14.4804 13.9897 14.5548 13.8195C14.6292 13.6494 14.6672 13.4657 14.6665 13.28Z" stroke="#83C5BE" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
+          </g>
+          <defs>
+          <clipPath id="clip0_46_3061">
+          <rect width="16" height="16" fill="white"/>
+          </clipPath>
+          </defs>
+          </svg>          
+        {{userAccount.phoneNumber}}</div>
+      <div class="info-item" *ngIf="userAccount.firstName && userAccount.lastName">
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" style="margin-right: 4px">
+          <path d="M13.3332 14V12.6667C13.3332 11.9594 13.0522 11.2811 12.5521 10.781C12.052 10.281 11.3737 10 10.6665 10H5.33317C4.62593 10 3.94765 10.281 3.44755 10.781C2.94746 11.2811 2.6665 11.9594 2.6665 12.6667V14" stroke="#83C5BE" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
+          <path d="M8.00016 7.33333C9.47292 7.33333 10.6668 6.13943 10.6668 4.66667C10.6668 3.19391 9.47292 2 8.00016 2C6.5274 2 5.3335 3.19391 5.3335 4.66667C5.3335 6.13943 6.5274 7.33333 8.00016 7.33333Z" stroke="#83C5BE" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+          
+        {{userAccount.firstName}} {{userAccount.lastName}}</div>
+    </div>
+    <div class="container-s">
+      <div class="description-text">Description</div>
+      <div class="description-item">{{userAccount.description}}</div>
+    </div>
+  </div>
+  <div class="right-container">
+    <div class="container-s" *ngIf="topFiveGenres.length>0">
+      <div class="description-text">Most played genres</div>
+      <div class="description-item" *ngFor="let g of topFiveGenres">
+      {{g.count.genre}} => {{g.count.count}}</div>
+    </div>
+    <div class="container-s" *ngIf="topFiveTypes.length>0">
+      <div class="description-text">Most performances as</div>
+      <div class="description-item" *ngFor="let g of topFiveTypes">
+      {{g.count.type}} => {{g.count.count}}</div>
+    </div>
+    <div class="map-info-container">
+      <div class="description-text">Location</div>
+      <div class="map">
+        <img src="https://boostcreators.nl/wp-content/uploads/Boost-Creators-op-Google-Maps.jpg" class="map-picture">
+      </div>
+      <div class="addy">
+        {{userAccount.address}}
+      </div>
+  </div>
+</div>
+</div>
+<div class="info-banner" *ngIf="calendarvis">
+  <div class="container-s">
+    <app-calendar [requestID]="userAccount.userID"></app-calendar>
+  </div>
+</div>
+<div class="review-banner" *ngIf="reviewsvis">
+  <div *ngIf="reviews.length==0" class="conditional">
+    This account has not received any reviews yet
+  </div>
+  <div class="review-summary-container" *ngIf="reviews.length > 0">
+    <div *ngFor="let category of getProgressCategories()" class="review-summary">
+      <div class="category">{{ category }}</div>
+      <div class="score-bar">
+        <div class="score-filled" [style.width.%]="getProgressPercentage(category)">
+          {{ getProgressPercentage(category) }}%
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <div class="wrapppp">
+    <div *ngFor="let rc of reviews" class="complete-r-container">
+      <div class="review-container2">
+      <div class="reviewe-info" [routerLink]="['/profileDisplay', rc.writerID]">
+        <div class="reviewe-pic">
+          <img [src]="rc.user.profilePicture" style="width:100%;height:100%;border-radius: 50%;">
+        </div>
+        <div class="reviewe-name">{{rc.user.displayName}}</div>
+      </div>
+      <div style="display:flex; align-items:center;" (click)="toggleDetails(rc)">
+        <div class="reviewe-score">{{rc.avgScore | number:'1.0-1'}}</div>
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="#FAB81E" xmlns="http://www.w3.org/2000/svg" style="margin-bottom:2px;">
+          <path d="M15.09 8.26L12 2L8.91 8.26L2 9.27L7 14.14L5.82 21.02L12 17.77L18.18 21.02L17 14.14L22 9.27L15.09 8.26Z" stroke="#FAB81E" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>   
+      </div>
+    </div>
+    <div class="review-cat" style="justify-content:space-between; width:100%;" (click)="toggleDetails(rc)">
+      <div class="score-text">{{rc.listing.title}}</div>
+      <div class="score-result">€{{rc.listing.suggestedPrice}}/hr</div>
+     </div>
+    <div class="r-details-container" *ngIf="rc.showDetails">
+       <div *ngIf="rc.onTime" class="review-cat">
+        <div class="score-text">On time</div>
+        <div class="score-result">{{rc.onTime}}/5</div>
+       </div>
+       <div *ngIf="rc.professionalism" class="review-cat">
+        <div class="score-text">Professionalism</div>
+        <div class="score-result">{{rc.professionalism}}/5</div>
+       </div>
+       <div *ngIf="rc.friendly" class="review-cat">
+        <div class="score-text">Friendly</div>
+        <div class="score-result">{{rc.friendly}}/5</div>
+       </div>
+       <div *ngIf="rc.collaboration" class="review-cat">
+        <div class="score-text">Collaboration</div>
+        <div class="score-result">{{rc.collaboration}}/5</div>
+       </div>
+       <div *ngIf="rc.music" class="review-cat">
+        <div class="score-text">Music</div>
+        <div class="score-result">{{rc.music}}/5</div>
+       </div>
+       <div *ngIf="rc.originality" class="review-cat">
+        <div class="score-text">Originality</div>
+        <div class="score-result">{{rc.originality}}/5</div>
+       </div>
+       <div *ngIf="rc.audience" class="review-cat">
+        <div class="score-text">Audience</div>
+        <div class="score-result">{{rc.audience}}/5</div>
+       </div>
+       <div *ngIf="rc.experience" class="review-cat">
+        <div class="score-text">Experience</div>
+        <div class="score-result">{{rc.experience}}/5</div>
+       </div>
+       <div *ngIf="rc.atmosphere" class="review-cat">
+        <div class="score-text">Atmosphere</div>
+        <div class="score-result">{{rc.atmosphere}}/5</div>
+       </div>
+       <div *ngIf="rc.accomodation" class="review-cat">
+        <div class="score-text">Accomodation</div>
+        <div class="score-result">{{rc.accomodation}}/5</div>
+       </div>
+       <div *ngIf="rc.acoustics" class="review-cat">
+        <div class="score-text">Acoustics</div>
+        <div class="score-result">{{rc.acoustics}}/5</div>
+       </div>
+       <div *ngIf="rc.organisation" class="review-cat">
+        <div class="score-text">Organisation</div>
+        <div class="score-result">{{rc.organisation}}/5</div>
+       </div>
+       <div *ngIf="rc.helpful" class="review-cat">
+        <div class="score-text">Helpful</div>
+        <div class="score-result">{{rc.helpful}}/5</div>
+       </div>
+       <div *ngIf="rc.originality" class="review-cat">
+        <div class="score-text">{{rc.listing.title}}</div>
+        <div class="score-result">€{{rc.listing.suggestedPrice}}/hr</div>
+       </div>
+       <div *ngIf="rc.reviewText" class="review-cat2">
+        <u>Description:</u>{{rc.reviewText}}</div>
+    </div>
+  </div>
+    </div>
+</div>
+</div>

@@ -1,0 +1,166 @@
+
+  <div class="top-bar">
+    <div class="searchbar">
+      <svg
+          width="24"
+          height="24"
+          viewBox="0 0 24 24"
+          fill="none"
+          xmlns="http://www.w3.org/2000/svg"
+          style="margin-left: 10px; margin-right: 20px"
+        >
+          <path
+            d="M11 19C15.4183 19 19 15.4183 19 11C19 6.58172 15.4183 3 11 3C6.58172 3 3 6.58172 3 11C3 15.4183 6.58172 19 11 19Z"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke="#565360"
+          />
+          <path
+            d="M21 21L16.65 16.65"
+            stroke="#565360"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          />
+        </svg>
+        <input type="text" placeholder="Search over all listings" class="search-input" [(ngModel)]="searchTerm"/>
+    </div>
+    <div class="filter-button" (click)="toggleFilterPane()">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M2 3H22L14 12.46V21L10 19V12.46L2 3Z" [class.filled]='filled' stroke="#565360" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>      
+    </div>
+    <div class="order-button"> 
+  <app-select-one [options]="sortColNames" (optionSelected)="handleOrderSelected($event)" style="width:100%;margin-top:6px;"></app-select-one>
+    </div>
+  </div>
+  <div class="filter-pane" *ngIf="showFilterPane">
+    <div class="calendar-container">
+      <mat-calendar
+            id="calendar"
+            [selected]="selected"
+            style="width:280px"
+            (selectedChange)="selected = $event"
+            class="l-cal">
+          </mat-calendar>
+    
+          <button
+          *ngIf="selected"
+          type="button"
+          class="btn btn-outline-danger btn-block"
+          (click)="selected = null"
+          >
+            Clear Date Selection
+        </button>
+    </div>
+    <div class="filter-buttons-container">
+      <div class="timeslots">
+      <div class="time-filter">
+      <div class="time-b">
+        <div class="filter-text">Start time</div>
+        <div class="time-input-container">
+          <input
+            type="time"
+            min="00:00"
+            max="24:00"
+            style="background:#83C5BE;"
+            class="time-input"
+            [(ngModel)]="selectedStart"
+          >
+        </div>
+      </div>
+    <div class="time-b" style="margin-left:20px">
+      <div class="filter-text">End time</div>
+      <input
+      type="time"
+      min="00:00"
+      max="24:00"
+      style="background:#83C5BE"
+      class="time-input"
+      [(ngModel)]="selectedEnd">
+    </div>
+  </div>
+      <button
+      *ngIf="selectedEnd || selectedStart"
+      type="button"
+      (click)="selectedEnd = null; selectedStart=null;"
+      class="btn btn-outline-danger btn-block"
+      style="margin-top:10px;">
+        Clear Time Selection
+    </button>
+  </div>
+  <div class="m-sel">
+    <div class="filter-text" style="margin-bottom:-10px;margin-top:4px">Filter genres</div>
+    <app-select-multiple class='m-sel-g' [header]="'genre'" [options]="genres" (optionSelected)="handleGenresSelected($event)"></app-select-multiple>
+  </div>
+  <div class="m-sel" style="margin-top:-18px">
+    <div class="filter-text" style="margin-bottom:-10px; margin-top:2px">Filter types</div>
+    <app-select-multiple class='m-sel-g' [header]="'type'" [options]="artistTypes" (optionSelected)="handleTypesSelected($event)"></app-select-multiple>
+  </div>
+  <div class="time-b" style="margin-top:-12px">
+    <div class="filter-text">Show pay/hr higher than</div>
+    <input type="number" [(ngModel)]="selectedPay" class="req-pay">
+  </div>
+  <div class="time-b" style="margin-top:6px">
+    <div class="filter-text" style="margin-bottom:4px">Required review score</div>
+    <div class="selection-rev">
+      <button  class='review-sel' (click)="onButtonClick(-1)" [class.selected]="requiredReviewScore === -1">all</button>
+      <button  class='review-sel' *ngFor="let number of numbers" (click)="onButtonClick(number)" [class.selected]="requiredReviewScore === number">+{{ number }}</button>
+    </div>
+  </div>
+  </div>
+  </div>
+  <div class="amnt-found" *ngIf="isLoading">Please wait ...</div>
+  <div class="amnt-found" *ngIf="!isLoading">{{filteredListings().length}} result(s) in total</div>
+  <div class="listings-container">
+  <app-loading-spinner *ngIf="isLoading"></app-loading-spinner>
+  <div class="listing" *ngFor="let listing of displayedListings" [routerLink]="['/listings', 'details', listing.listingID]">
+    <div class="listing-header">
+      <div class="image-container">
+        <img [src]="listing.listingPicture" class="listing-image">
+        <div class="text-overlay">
+          <div style="margin-top:6px;margin-right:2px">
+            {{listing.reviewScore ? listing.reviewScore:"-"}}
+          </div>
+          <ngb-rating max=1 [(rate)]="listing.reviewScore" readonly="true" *ngIf="listing.reviewScore">
+            <ng-template let-fill="fill" let-index="index">
+              <span [class]="'rating-star-back' + (fill === 100 ? '-filled' : '')">
+                &#9733;
+              </span>
+            </ng-template>
+          </ngb-rating>
+        </div>
+      </div>
+    <div class="listing-title">{{listing.title}}</div>
+    <div class="listing-date">{{listing.date | date:'dMMMM'}} '{{ listing.date | date:'yy' }}</div>
+    <div class="listing-body">
+    <div class="listing-details">► {{listing.startTime.substring(0,5)}} - {{listing.endTime.substring(0,5)}}</div>
+    <div class="listing-details">► {{listing.location}}</div>
+    <div class="listing-details">► {{listing.genre}}</div>
+    <div class="listing-details">► {{listing.artistType}}</div>
+  </div>
+  </div>
+    <div class="listing-footer">
+      <div class="listing-pay">€{{listing.suggestedPrice}}/hr</div>
+      <div class="listing-profile" [routerLink]="['/profileDisplay', listing.userID]">{{listing.displayName}} 
+      </div>
+    </div>
+  </div>
+  
+  <div class="bottom-container">
+  <div class="left-bottom">
+  <button (click)="showPreviousListings()" *ngIf="!(startIndex === 0)" class="total-button">Previous</button>
+  <button (click)="showNextListings()" *ngIf="!(startIndex + displayCount >= listings.length)" class="total-button">Next</button>
+  </div>
+  <div class="right-bottom">
+  listings per page
+  <button class='total-button' [class.sel-bot]="displayCount===8" (click)="updateDisplayCount(8)">8</button>
+  <button class='total-button' [class.sel-bot]="displayCount===16" (click)="updateDisplayCount(16)">16</button>
+  <button class='total-button' [class.sel-bot]="displayCount===24" (click)="updateDisplayCount(24)">24</button>
+  </div>
+  </div>
+  </div>
+  
+  
+  

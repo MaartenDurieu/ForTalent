@@ -1,0 +1,492 @@
+<link
+  href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap"
+  rel="stylesheet"
+/>
+<div class="listing-container" *ngIf="filteredListings() as lst">
+  <div class="top">
+    <div class="searchbar">
+      <svg
+        width="24"
+        height="24"
+        viewBox="0 0 24 24"
+        fill="none"
+        xmlns="http://www.w3.org/2000/svg"
+        style="margin-left: 10px; margin-right: 20px"
+      >
+        <path
+          d="M11 19C15.4183 19 19 15.4183 19 11C19 6.58172 15.4183 3 11 3C6.58172 3 3 6.58172 3 11C3 15.4183 6.58172 19 11 19Z"
+          stroke="#F2F2F2"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        />
+        <path
+          d="M21 21L16.65 16.65"
+          stroke="#F2F2F2"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        />
+      </svg>
+      <input type="text" class="search-input" placeholder="Search listing" />
+    </div>
+
+    <div class="f-button" (click)="toggleDisplay()">
+      <div>
+        <div class="f-button-text">
+          <svg
+            width="24"
+            height="24"
+            viewBox="0 0 24 24"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+            style="margin-right: 6px; margin-bottom: 2px"
+          >
+            <path
+              d="M3 12H21"
+              stroke="#F2F2F2"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            />
+            <path
+              d="M3 6H21"
+              stroke="#F2F2F2"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            />
+            <path
+              d="M3 18H21"
+              stroke="#F2F2F2"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            />
+          </svg>
+          Filters
+        </div>
+      </div>
+    </div>
+
+    <div class="f-button">
+      <div class="f-button-text">
+        <select class="cus" id="orderBySelect" [(ngModel)]="sortCol">
+          <option
+            style="background-color: #2e3238"
+            *ngFor="let c of sortCols; let i = index"
+            [value]="i"
+          >
+            {{ c.name }}
+          </option>
+        </select>
+      </div>
+    </div>
+  </div>
+
+  <div class="filter-pane" [ngStyle]="{'display': displayDiv ? 'block' : 'none'}">
+    <div style="display:flex; width:600px;">
+    <div style="margin-left:20px;margin-right:20px;">
+      <mat-card style=" width:400px;height:470px; background-color: #606163; color: #F2F2F2;">
+        <mat-calendar
+          id="calendar"
+          [selected]="selected"
+          style="color:white;"
+          (selectedChange)="selected = $event">
+        </mat-calendar>
+  
+        <button
+        *ngIf="selected"
+        type="button"
+        class="btn btn-outline-danger btn-block"
+        (click)="selected = null"
+        style="margin-top:-20px;">
+          Clear Date Selection
+      </button>
+      </mat-card>
+    </div>
+  
+    <div class="filters-page">
+    <mat-card style="width: 300px;padding-top: 10px">
+        <label for="inputStartTimestamp">
+          Start Time
+        </label>
+        <input
+        type="time"
+        min="00:00"
+        max="24:00"
+        class="form-control"
+        [(ngModel)]="selectedStart">
+      </mat-card>
+      <mat-card style="width: 100%;padding-top: 10px">
+        <label for="inputEndTimestamp">
+          End Time
+        </label>
+        <input
+        type="time"
+        min="00:00"
+        max="24:00"
+        class="form-control"
+        [(ngModel)]="selectedEnd">
+        <button
+        *ngIf="selectedEnd || selectedStart"
+        type="button"
+        (click)="selectedEnd = null; selectedStart=null;"
+        class="btn btn-outline-danger btn-block"
+        style="margin-top:10px;">
+          Clear Time Selection
+      </button>
+      </mat-card>
+      
+  
+      <mat-card style="width: 100%;padding-top: 10px">
+        <label for="inputEndTimestamp">
+          Artist
+        </label>
+        <ng-multiselect-dropdown
+        [placeholder]="'Filter artist'"
+        [settings]="dropdownSettings"
+        [data]="dropdownListTypes"
+        [(ngModel)]="selectedItemsTypes"
+        ></ng-multiselect-dropdown>
+      </mat-card>
+    <mat-card style="width: 100%;padding-top: 10px">
+        <label for="inputEndTimestamp">
+          Genre
+        </label>
+        <ng-multiselect-dropdown
+        [placeholder]="'Filter genres'"
+        [settings]="dropdownSettings"
+        [data]="dropdownList"
+        [(ngModel)]="selectedItems"
+        ></ng-multiselect-dropdown>
+      </mat-card>
+  
+    </div>
+    </div>
+  </div>
+
+
+  <div class="row" style="margin-top: 10px; margin-bottom: -4px">
+    <!-- Amount of results -->
+    <div class="col">
+      <p style="margin: 0px">
+        <i
+          style="
+            color: #d8d8d8;
+            font-family: 'Poppins';
+            font-style: normal;
+            font-weight: 600;
+          "
+          >{{ lst.length }} result{{ lst.length > 1 ? "s" : "" }}
+        </i>
+      </p>
+    </div>
+
+    <!-- Template for page navigation -->
+    <ng-template #pages>
+      <div class="col-auto" *ngIf="lst.length > 0">
+        <div class="row">
+          <!-- Items per page selector -->
+          <div class="col-auto">
+            <div class="form-group">
+              <label for="itemsPerPage" style="margin-right: 3px">
+                Items Per Page:
+              </label>
+
+              <!-- Radio -->
+              <div
+                class="btn-group mr-2"
+                role="group"
+                aria-label="First group"
+                id="itemsPerPage"
+              >
+                <button
+                  *ngFor="let o of pageLimitOption; let i = index"
+                  [class]="
+                    'btn btn' +
+                    (pageLimitIndex === i ? '' : '-outline') +
+                    '-secondary'
+                  "
+                  (click)="pageLimitIndex = i; currentPage = 1"
+                >
+                  {{ o }}
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Page selector -->
+          <div class="col-auto">
+            <div class="input-group mb-3" id="currPage">
+              <!-- Decrement page nr button -->
+              <div class="input-group-prepend">
+                <button
+                  class="btn btn-outline-secondary"
+                  (click)="
+                    currentPage =
+                      currentPage !== 1 ? currentPage - 1 : currentPage
+                  "
+                >
+                  &#60;
+                </button>
+              </div>
+
+              <!-- Page nr input -->
+              <input
+                type="number"
+                min="1"
+                [max]="maxPage(lst)"
+                class="form-control"
+                [(ngModel)]="currentPage"
+              />
+
+              <!-- Increment page nr button -->
+              <div class="input-group-append">
+                <button
+                  class="btn btn-outline-secondary"
+                  (click)="
+                    currentPage =
+                      currentPage !== maxPage(lst)
+                        ? currentPage + 1
+                        : currentPage
+                  "
+                >
+                  &#62;
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </ng-template>
+    <!-- Page navigation -->
+    <ng-container *ngTemplateOutlet="pages"></ng-container>
+  </div>
+
+
+
+
+<div *ngIf="pageLimitOption[pageLimitIndex] as pageLimit" style="display:flex; justify-content: center; flex-direction: row; align-items: center; width:100%; flex-wrap: wrap; justify-content: space-between;">
+  <div class="listing" *ngFor="let l of lst.slice(pageLimit * (currentPage - 1), pageLimit * (currentPage - 1) + pageLimit)" 
+  [routerLink]="['/listings', 'details', l.listingID]">
+    <div class="picture">
+      <img
+                  [src]="l.listingPicture ? l.listingPicture : image.getPlaceholderImage()"
+                  [alt]="l.title">
+    </div>
+    <div class="listing-info-container">
+      <div class="top-section">
+        <div class="title">
+          {{l.title}}
+          <div style="display:flex; flex-direction: row; font-size: 16px; margin-left:8px;">
+          <ngb-rating max=1 [(rate)]="l.reviewScore" readonly="true" *ngIf="l.reviewScore">
+            <ng-template let-fill="fill" let-index="index">
+              <span [class]="'rating-star-back' + (fill === 100 ? '-filled' : '')">
+                <span class="rating-star-front" [style]="'width:' + fill + '%'">
+                  &#9733;
+                </span>
+                &#9733;
+              </span>
+            </ng-template>
+          </ngb-rating>
+          <div style="margin-top:6px;">
+          ({{l.reviewScore ? l.reviewScore:"No reviews"}})
+        </div>
+      </div>
+        </div>
+        <div class="listing-date">
+          {{l.date | date:'d MMMM y'}}
+        </div>
+      </div>
+      <div class="section-card">
+      <div class="left-section">
+        <div class="listing-details">
+
+        
+          <div class="info-div">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M12 23C12 23 21 17 21 10C21 7.61305 20.0518 5.32387 18.364 3.63604C16.6761 1.94821 14.3869 1 12 1C9.61305 1 7.32387 1.94821 5.63604 3.63604C3.94821 5.32387 3 7.61305 3 10C3 17 12 23 12 23Z" stroke="#9A9A9A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              <path d="M12 13C13.6569 13 15 11.6569 15 10C15 8.34315 13.6569 7 12 7C10.3431 7 9 8.34315 9 10C9 11.6569 10.3431 13 12 13Z" stroke="#9A9A9A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>              
+            <div class="info-text">
+              {{l.location}}  
+            </div>            
+          </div>
+
+          <div class="info-div">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M12 22C17.5228 22 22 17.5228 22 12C22 6.47715 17.5228 2 12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22Z" stroke="#9A9A9A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              <path d="M12 6V12L16 14" stroke="#9A9A9A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>                           
+            <div class="info-text">
+              {{l.startTime}} to {{l.endTime}}
+            </div>            
+          </div>
+
+          <div class="info-div">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M9.87868 1.87868C10.4413 1.31607 11.2044 1 12 1C12.7956 1 13.5587 1.31607 14.1213 1.87868C14.6839 2.44129 15 3.20435 15 4V12C15 12.7956 14.6839 13.5587 14.1213 14.1213C13.5587 14.6839 12.7956 15 12 15C11.2044 15 10.4413 14.6839 9.87868 14.1213C9.31607 13.5587 9 12.7956 9 12V4C9 3.20435 9.31607 2.44129 9.87868 1.87868Z" stroke="#9A9A9A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              <path d="M19 10V12C19 13.8565 18.2625 15.637 16.9497 16.9497C15.637 18.2625 13.8565 19 12 19C10.1435 19 8.36301 18.2625 7.05025 16.9497C5.7375 15.637 5 13.8565 5 12V10" stroke="#9A9A9A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              <path d="M12 19V23" stroke="#9A9A9A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              <path d="M8 23H16" stroke="#9A9A9A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>                           
+            <div class="info-text">
+              {{l.artistType}} 
+            </div>            
+          </div>
+
+          <div class="info-div">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M9 18V5L21 3V16" stroke="#9A9A9A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              <path d="M6 21C7.65685 21 9 19.6569 9 18C9 16.3431 7.65685 15 6 15C4.34315 15 3 16.3431 3 18C3 19.6569 4.34315 21 6 21Z" stroke="#9A9A9A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              <path d="M18 19C19.6569 19 21 17.6569 21 16C21 14.3431 19.6569 13 18 13C16.3431 13 15 14.3431 15 16C15 17.6569 16.3431 19 18 19Z" stroke="#9A9A9A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>                          
+            <div class="info-text">
+              {{l.genre}} 
+            </div>            
+          </div>
+
+
+
+      </div>
+      </div>
+      <div class="right-section">
+      <div class="price-info">
+        €{{l.suggestedPrice}}/hr
+                </div>
+        <div class="bottom-section">
+          <div class="profile-clicker" [routerLink]="['/profileDisplay', l.userID]">
+          <div class="organiser-picture" style="margin-right:4px; margin-left:4px;">
+          <img style="border-radius: 50%; height: 80%; width: 80%" [src]="l.profilePicture">
+        </div>
+          <div class="organiser-name" style="margin-right:4px;">
+          {{l.displayName}}
+        </div>
+      </div>
+        </div>
+      </div>
+    </div>
+        
+    </div>
+  </div>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+  <div class="row" style="margin-top: -30px; margin-bottom: 0px">
+    <!-- Amount of results -->
+    <div class="col">
+      <p style="margin: 0px">
+        <i
+          style="
+            color: #d8d8d8;
+            font-family: 'Poppins';
+            font-style: normal;
+            font-weight: 600;
+          "
+          >{{ lst.length }} result{{ lst.length > 1 ? "s" : "" }}
+        </i>
+      </p>
+    </div>
+
+    <!-- Template for page navigation -->
+    <ng-template #pages>
+      <div class="col-auto" *ngIf="lst.length > 0">
+        <div class="row">
+          <!-- Items per page selector -->
+          <div class="col-auto">
+            <div class="form-group">
+              <label for="itemsPerPage" style="margin-right: 3px">
+                Items Per Page:
+              </label>
+
+              <!-- Radio -->
+              <div
+                class="btn-group mr-2"
+                role="group"
+                aria-label="First group"
+                id="itemsPerPage"
+              >
+                <button
+                  *ngFor="let o of pageLimitOption; let i = index"
+                  [class]="
+                    'btn btn' +
+                    (pageLimitIndex === i ? '' : '-outline') +
+                    '-secondary'
+                  "
+                  (click)="pageLimitIndex = i; currentPage = 1"
+                >
+                  {{ o }}
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Page selector -->
+          <div class="col-auto">
+            <div class="input-group mb-3" id="currPage">
+              <!-- Decrement page nr button -->
+              <div class="input-group-prepend">
+                <button
+                  class="btn btn-outline-secondary"
+                  (click)="
+                    currentPage =
+                      currentPage !== 1 ? currentPage - 1 : currentPage
+                  "
+                >
+                  &#60;
+                </button>
+              </div>
+
+              <!-- Page nr input -->
+              <input
+                type="number"
+                min="1"
+                [max]="maxPage(lst)"
+                class="form-control"
+                [(ngModel)]="currentPage"
+              />
+
+              <!-- Increment page nr button -->
+              <div class="input-group-append">
+                <button
+                  class="btn btn-outline-secondary"
+                  (click)="
+                    currentPage =
+                      currentPage !== maxPage(lst)
+                        ? currentPage + 1
+                        : currentPage
+                  "
+                >
+                  &#62;
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </ng-template>
+    <!-- Page navigation -->
+    <ng-container *ngTemplateOutlet="pages"></ng-container>
+  </div>
+</div>
+
+<div id="Officer" style="display:none">
+<div class="add-button" [routerLink]="['/listings','form']">
+  <svg width="30" height="30" viewBox="0 0 30 30" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M15 6.25V23.75" stroke="#2A2E34" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+    <path d="M6.25 15H23.75" stroke="#2A2E34" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>
+    
+</div>
+</div>

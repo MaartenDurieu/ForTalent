@@ -1,0 +1,351 @@
+
+<div class="wrapper" *ngIf="artistAccount">
+  <div class="signup-container">
+    <h1>Write review</h1>
+    <form
+      id="VenueForm"
+      [formGroup]="form"
+    >
+    <div class="overarch-group">
+      <div class="listing-info">
+        <div class="listing-title">{{listing.title}}</div>
+        <div class="listing-date">{{listing.date}}</div>
+      </div>
+      <div class="listing-info" style="border-bottom: 1px solid #9e9e9e;">
+        <div class="reviewe" [routerLink]="['/profileDisplay', reviewe.userID]">
+        <div class="reviewe-pic">
+          <img [src]="reviewe.profilePicture" style="width:100%;height:100%;border-radius: 50%;">
+        </div>
+        <div class="reviewe-name">{{reviewe.displayName}}</div>
+        <div style="display:flex; align-items:center;">
+          <div class="reviewe-score">{{reviewe.reviewScore | number:'1.0-1'}}</div>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="#FAB81E" xmlns="http://www.w3.org/2000/svg" style="margin-bottom:2px;">
+            <path d="M15.09 8.26L12 2L8.91 8.26L2 9.27L7 14.14L5.82 21.02L12 17.77L18.18 21.02L17 14.14L22 9.27L15.09 8.26Z" stroke="#FAB81E" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>   
+        </div>
+      </div>
+      <div class="listing-price">{{listing.genre}}-{{listing.artistType}}: €{{listing.suggestedPrice}}/hr</div>
+    </div>
+    </div>
+    <!--Atmosphere-->
+    <div class="form-group">
+      <label for="inputAtmosphere">
+        Atmosphere
+       </label>
+       <br>
+        <ngb-rating formControlName="atmosphere" max="5" id="inputAtmosphere">
+          <ng-template  let-fill="fill">
+            <span class="defaultNote" [class.filled]="fill === 100">
+              <span class="paintedNote" [style.width.%]="fill">♫</span>♫
+            </span>
+          </ng-template>
+        </ngb-rating>
+    </div>
+
+    <!--Accomodation-->
+    <div class="form-group">
+      <label for="inputAccomodation">
+        accomodation
+       </label>
+       <br>
+        <ngb-rating formControlName="accomodation" max="5" id="inputAccomodation">
+          <ng-template  let-fill="fill">
+            <span class="defaultNote" [class.filled]="fill === 100">
+              <span class="paintedNote" [style.width.%]="fill">♫</span>♫
+            </span>
+          </ng-template>
+        </ngb-rating>
+    </div>
+
+    <!--Acoustics-->
+    <div class="form-group">
+      <label for="inputAcoustics">
+        Acoustics
+       </label>
+       <br>
+        <ngb-rating formControlName="acoustics" max="5" id="inputAcoustics">
+          <ng-template  let-fill="fill">
+            <span class="defaultNote" [class.filled]="fill === 100">
+              <span class="paintedNote" [style.width.%]="fill">♫</span>♫
+            </span>
+          </ng-template>
+        </ngb-rating>
+    </div>
+
+    <!--Audience-->
+    <div class="form-group">
+      <label for="inputAudience">
+        Audience
+       </label>
+       <br>
+        <ngb-rating formControlName="audience" max="5" id="inputAudience">
+          <ng-template  let-fill="fill">
+            <span class="defaultNote" [class.filled]="fill === 100">
+              <span class="paintedNote" [style.width.%]="fill">♫</span>♫
+            </span>
+          </ng-template>
+        </ngb-rating>
+    </div>
+
+    <!--Organisation-->
+    <div class="form-group">
+      <label for="inputOrganisation">
+        Organisation
+       </label>
+       <br>
+        <ngb-rating formControlName="organisation" max="5" id="inputOrganisation">
+          <ng-template  let-fill="fill">
+            <span class="defaultNote" [class.filled]="fill === 100">
+              <span class="paintedNote" [style.width.%]="fill">♫</span>♫
+            </span>
+          </ng-template>
+        </ngb-rating>
+    </div>
+
+    <!--Helpful-->
+    <div class="form-group">
+      <label for="inputHelpful">
+        Helpful
+       </label>
+       <br>
+        <ngb-rating formControlName="helpful" max="5" id="inputHelpful">
+          <ng-template  let-fill="fill">
+            <span class="defaultNote" [class.filled]="fill === 100">
+              <span class="paintedNote" [style.width.%]="fill">♫</span>♫
+            </span>
+          </ng-template>
+        </ngb-rating>
+    </div>
+
+    <!--Friendly-->
+    <div class="form-group">
+      <label for="inputFriendly">
+        Friendly
+       </label>
+       <br>
+        <ngb-rating formControlName="friendly" max="5" id="inputFriendly">
+          <ng-template  let-fill="fill">
+            <span class="defaultNote" [class.filled]="fill === 100">
+              <span class="paintedNote" [style.width.%]="fill">♫</span>♫
+            </span>
+          </ng-template>
+        </ngb-rating>
+    </div>
+
+    <!--Overall Feeling/Experience-->
+    <div class="form-group">
+      <label for="inputExperience">
+        Overall Feeling/Experience
+       </label>
+       <br>
+        <ngb-rating formControlName="experience" max="5" id="inputExperience">
+          <ng-template  let-fill="fill">
+            <span class="defaultNote" [class.filled]="fill === 100">
+              <span class="paintedNote" [style.width.%]="fill">♫</span>♫
+            </span>
+          </ng-template>
+        </ngb-rating>
+    </div>
+    <div class="form-group">
+      <label for="textareaReview">
+       Review 
+      </label>
+      <textarea
+        id="textareaReview"
+        placeholder="Write a complete review"
+        rows="8"
+        formControlName="reviewText">
+      </textarea>
+    </div>
+  </form>
+      
+      <button
+        (click)="submitReview()"
+        class="submit"
+        [disabled]="!(f.atmosphere && f.accomodation && f.acoustics && f.audience && f.organisation && f.helpful &&
+        f.friendly && f.experience)"
+        *ngIf="form.getRawValue() as f"
+        >
+        SUBMIT REVIEW
+      </button>
+  </div>
+</div>
+
+      <div class="wrapper" *ngIf="venueAccount">
+        <div class="signup-container">
+          <h1>Write review</h1>
+          <form
+            id="VenueForm"
+            [formGroup]="form"
+          >
+          <div class="form-group">
+            <div class="listing-info">
+              <div class="listing-title">{{listing.title}}</div>
+              <div class="listing-date">{{listing.date}}</div>
+            </div>
+            <div class="listing-info" style="border-bottom: 1px solid #9e9e9e;">
+              <div class="reviewe" [routerLink]="['/profileDisplay', reviewe.userID]">
+              <div class="reviewe-pic">
+                <img [src]="reviewe.profilePicture" style="width:100%;height:100%;border-radius: 50%;">
+              </div>
+              <div class="reviewe-name">{{reviewe.displayName}}</div>
+              <div style="display:flex; align-items:center;">
+                <div class="reviewe-score">{{reviewe.reviewScore | number:'1.0-1'}}</div>
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="#FAB81E" xmlns="http://www.w3.org/2000/svg" style="margin-bottom:2px;">
+                  <path d="M15.09 8.26L12 2L8.91 8.26L2 9.27L7 14.14L5.82 21.02L12 17.77L18.18 21.02L17 14.14L22 9.27L15.09 8.26Z" stroke="#FAB81E" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                  </svg>   
+              </div>
+            </div>
+            <div class="listing-price">{{listing.genre}}-{{listing.artistType}}: €{{listing.suggestedPrice}}/hr</div>
+          </div>
+          </div>
+          <!--On time-->
+          <div class="form-group">
+            <label for="inputOnTime">
+              On Time
+             </label>
+             <br>
+              <ngb-rating formControlName="onTime" max="5" id="inputOnTime">
+                <ng-template  let-fill="fill">
+                  <span class="defaultNote" [class.filled]="fill === 100">
+                    <span class="paintedNote" [style.width.%]="fill">♫</span>♫
+                  </span>
+                </ng-template>
+              </ngb-rating>
+              <br>
+          </div>
+
+          <!--Professionalism-->
+          <div class="form-group">
+            <label for="inputProfessionalism">
+              Professionalism
+             </label>
+             <br>
+              <ngb-rating formControlName="professionalism" max="5" id="inputProfessionalism">
+                <ng-template  let-fill="fill">
+                  <span class="defaultNote" [class.filled]="fill === 100">
+                    <span class="paintedNote" [style.width.%]="fill">♫</span>♫
+                  </span>
+                </ng-template>
+              </ngb-rating>
+          </div>
+
+          <!--Collaboration and setup-->
+          <div class="form-group">
+            <label for="inputCollaboration">
+              Collaboration and Setup
+             </label>
+             <br>
+              <ngb-rating formControlName="collaboration" max="5" id="inputCollaboration">
+                <ng-template  let-fill="fill">
+                  <span class="defaultNote" [class.filled]="fill === 100">
+                    <span class="paintedNote" [style.width.%]="fill">♫</span>♫
+                  </span>
+                </ng-template>
+              </ngb-rating>
+              <br>
+          </div>
+
+          <!--Friendly/Pleasant-->
+          <div class="form-group">
+            <label for="inputFriendly">
+              Friendly and Pleasant
+             </label>
+             <br>
+              <ngb-rating formControlName="friendly" max="5" id="inputFriendly">
+                <ng-template  let-fill="fill">
+                  <span class="defaultNote" [class.filled]="fill === 100">
+                    <span class="paintedNote" [style.width.%]="fill">♫</span>♫
+                  </span>
+                </ng-template>
+              </ngb-rating>
+          </div>
+
+          <!--Music performance-->
+          <div class="form-group">
+            <label for="inputMusic">
+              Music Performance
+             </label>
+             <br>
+              <ngb-rating formControlName="music" max="5" id="inputMusic">
+                <ng-template  let-fill="fill">
+                  <span class="defaultNote" [class.filled]="fill === 100">
+                    <span class="paintedNote" [style.width.%]="fill">♫</span>♫
+                  </span>
+                </ng-template>
+              </ngb-rating>
+          </div>
+
+          <!--Originality-->
+          <div class="form-group">
+            <label for="inputOriginality">
+              Originality
+             </label>
+             <br>
+              <ngb-rating formControlName="originality" max="5" id="inputOriginality">
+                <ng-template  let-fill="fill">
+                  <span class="defaultNote" [class.filled]="fill === 100">
+                    <span class="paintedNote" [style.width.%]="fill">♫</span>♫
+                  </span>
+                </ng-template>
+              </ngb-rating>
+          </div>
+
+          <!--Audience-->
+          <div class="form-group">
+            <label for="inputAudience">
+              Loved by the Audience
+             </label>
+             <br>
+              <ngb-rating formControlName="audience" max="5" id="inputAudience">
+                <ng-template  let-fill="fill">
+                  <span class="defaultNote" [class.filled]="fill === 100">
+                    <span class="paintedNote" [style.width.%]="fill">♫</span>♫
+                  </span>
+                </ng-template>
+              </ngb-rating>
+          </div>
+
+          <hr>
+
+          <!--Overall Feeling/Experience-->
+          <div class="form-group">
+            <label for="inputExperience">
+              Overall Feeling/Experience
+             </label>
+             <br>
+              <ngb-rating formControlName="experience" max="5" id="inputExperience">
+                <ng-template  let-fill="fill">
+                  <span class="defaultNote" [class.filled]="fill === 100">
+                    <span class="paintedNote" [style.width.%]="fill">♫</span>♫
+                  </span>
+                </ng-template>
+              </ngb-rating>
+          </div>
+
+          <div class="form-group">
+            <label for="textareaReview">
+             Review 
+            </label>
+            <textarea
+              id="textareaReview"
+              [(ngModel)]="myInput"
+              placeholder="Write a complete review"
+              rows="8"
+              formControlName="reviewText">
+            </textarea>
+          </div>
+        </form>
+            
+            <button
+              (click)="submitReview()"
+              class="submit"
+              [disabled]="!(f.onTime && f.professionalism && f.collaboration && f.friendly && f.music && f.originality
+                    && f.audience && f.experience)"
+              *ngIf="form.getRawValue() as f"
+              >
+              SUBMIT REVIEW
+            </button>
+        </div>
+      </div>
+      

@@ -1,0 +1,143 @@
+
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark" *ngIf="user.isLoggedIn()">
+  <a class="navbar-brand" routerLink="/">
+    {{ title }}
+  </a>
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+
+  <div class="collapse navbar-collapse" id="navbarSupportedContent">
+
+    <!-- Left side Navbar -->
+    <ul class="navbar-nav mr-auto">
+      <!-- Link to My Listings page -->
+      <li class="nav-item" *ngIf="user.isLoggedIn()" id="Officer2" style = "display:none;">
+        <a class="nav-link" routerLink="/mylistings">
+          My Listings <span class="badge badge-primary" style="vertical-align: top; display:none;" *ngIf="expiredListingNot>0">{{ expiredListingNot }}</span>
+        </a>
+      </li>
+
+      <!-- Link to My Transactions page for artists-->
+      <li class="nav-item" *ngIf="user.isLoggedIn()">
+        <a class="nav-link" routerLink="/transactions/userArtist" [queryParams]="{transactions: true}">
+          Proposals <span class="badge badge-primary" style="vertical-align: top" 
+                    *ngIf="incomingPropNot>0">
+                    {{incomingPropNot}}</span>
+                    <span class="badge badge-primary" style="vertical-align: top" 
+                    *ngIf="offerAcceptedNot>0">
+                    {{offerAcceptedNot}}</span>
+                    <span class="badge badge-primary" style="vertical-align: top" 
+                    *ngIf="rejectedCancelledExpiredNot>0">
+                    {{rejectedCancelledExpiredNot}}</span>
+                    
+        </a>
+      </li>
+
+      <!-- Link to reviews page for artists-->
+      <li class="nav-item" *ngIf="user.isLoggedIn()">
+        <a class="nav-link" routerLink="/reviews">
+          Reviews <span class="badge badge-primary" style="vertical-align: top"
+                  *ngIf="receivedReviewNot>0">{{ receivedReviewNot }}</span>
+                  <span class="badge badge-primary" style="vertical-align: top"
+                  *ngIf="writeReviewNot>0">{{ writeReviewNot }}</span>
+        </a>
+      </li>
+      <li class="nav-item" *ngIf="user.isLoggedIn()">
+        <a class="nav-link" routerLink="/calendar">
+          My Calendar <span class="badge badge-primary" style="vertical-align: top"
+                   *ngIf="paymentReceivedNot>0">{{ paymentReceivedNot }}</span>
+        </a>
+      </li>
+
+      <li class="nav-item" *ngIf="user.isLoggedIn()">
+        <a class="nav-link" routerLink="/conversation">
+          Messages
+        </a>
+      </li>
+    </ul>
+
+   
+
+    <!-- Right side Navbar (no user logged in) -->
+    <ul class="navbar-nav my-2 my-lg-0" *ngIf="!user.isLoggedIn()">
+
+      <!-- Link to sign up page-->
+      <li class="nav-item">
+        <a class="nav-link" routerLink="/signup">
+          Sign Up
+        </a>
+      </li>
+
+      <!-- Linkt to log in page-->
+      <li class="nav-item">
+        <a class="nav-link" routerLink="/login">
+          Log In
+        </a>
+      </li>
+
+    </ul>
+
+    <!-- Right side Navbar (user logged in) -->
+    <ul class="navbar-nav my-2 my-lg-0" *ngIf="user.isLoggedIn()">
+
+      <!-- Notification dropdown - ->
+      <!--
+      <li class="nav-item dropdown">
+        <!-- Dropdown Button - ->
+        <a class="nav-link" href="#" id="notificationsDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+
+          <!-- Bell Icon - ->
+          <mat-icon> {{'notifications' + (getUnreadNotificationsAmount() > 0 ? '_active': '')}}</mat-icon>
+
+          <!-- Notifiaction amount - ->
+          <span class="badge badge-warning" *ngIf="getUnreadNotificationsAmount() > 0">
+            {{getUnreadNotificationsAmount()}}
+          </span>
+
+        </a>
+
+        <!-- Dropdown Menu - ->
+        <div class="dropdown-menu" aria-labelledby="notificationsDropdown">
+
+          <!-- Notifications - ->
+          <a class="dropdown-item" *ngFor="let n of notifications" (click)="clickedNotification(n)" style="width: 300px;white-space: pre-wrap;">
+            <div *ngIf="n.viewed">{{getNotificationMessage(n)}}</div>
+            <b *ngIf="!n.viewed">{{getNotificationMessage(n)}}</b>
+          </a>
+
+          <!-- No Notification - ->
+          <a class="dropdown-item" *ngIf="notifications.length === 0">
+            No notifications
+          </a>
+
+        </div>
+      </li>
+      -->
+
+      <!-- Link to profile page -->
+      <li class="nav-item">
+        <a routerLink="/profileDisplay" class="nav-link" [queryParams]="{Id:this.user.getId()}">
+          {{user.getUserName()}}
+          <!-- User Profile Picture-->
+          <img style="border-radius: 50%; height: 30px; width: 30px" [src]="user.getProfilePicture()">
+        </a>
+      </li>
+
+      <!-- Log out button -->
+      <li class="nav-item">
+        <!-- Log out and go to login page-->
+        <a class="nav-link" routerLink="/login" (click)="user.logOut()" style="margin-top: 3px">
+          log out
+        </a>
+      </li>
+
+      <!-- Link to create listing page -->
+      <button class="btn btn-success" style = "display:none;" id="Officer" [routerLink]="['/listings', 'form']">+ Create Listing</button>
+
+    </ul>
+  </div>
+</nav>
+<router-outlet></router-outlet>
+
+&nbsp;

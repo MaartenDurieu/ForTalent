@@ -1,0 +1,87 @@
+.wrapper{
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  width: 26%;
+  transform: translate(-50%, -50%);
+}
+.upper-container{
+  display:flex;
+  justify-content: center;
+  flex-direction: column;
+  margin-bottom:40px;
+}
+.login-container{
+  padding:20px;
+  background-color: #EDF6F9;
+  border-top:4px solid #006D77;
+  border-radius: 8px;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2),0 8px 16px rgba(0, 0, 0, 0.2);
+}
+.input-container{
+  display:flex;
+  flex-direction: column;
+  margin-bottom:20px;
+}
+
+app-loading-spinner{
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+.input-container > * {
+  margin-bottom:20px;
+}
+.login-text{
+  font-size:2rem;
+  display:flex;
+  justify-content: center;
+  letter-spacing: 3px;
+}
+.ForTalent-text{
+  font-size:1rem;
+  display:flex;
+  color:#908E9B;
+  justify-content: center;
+}
+.function-container{
+  display:flex;
+  flex-direction: column;
+  margin-bottom:20px;
+}
+.remember-me{
+  display:flex;
+  justify-content: left;
+  align-items: center;
+}
+.remember-me-text{
+  font-size: 0.9rem;
+  margin-left:4px;
+  color:#908E9B;
+}
+.seperator {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 30px;
+  color: #8B8E98;
+}
+.seperator .line {
+  display: block;
+  width: 100%;
+  height: 1px;
+  border: 0;
+  background-color: #e8e8e8;
+}
+.note {
+  font-size: 0.75rem;
+  color: #8B8E98;
+  display:flex;
+  justify-content: center;
+}
+.note:hover{
+  cursor: pointer;
+  text-decoration: underline;
+}
